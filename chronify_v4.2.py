@@ -129,11 +129,11 @@ def get_direction(path_str):
 
     path_lower = path_str.lower()
 
-    if "betzler_an_forne" in path_lower:
-        return "Betzler → Forne"
+    if "gesendet" in path_lower:
+        return "gesendet"
 
-    if "forne_an_betzler" in path_lower:
-        return "Forne → Betzler"
+    if "empfangen" in path_lower:
+        return "empfangen"
 
     return "Unbekannt"
 

@@ -1,13 +1,14 @@
 # Chronify
 
-## v4.1 - 2026-06-12
+## v4.2 - 2026-06-13
 Refactoring
-- Renamed project to chronify
-- Simplified folder structure
-- Removed sender/recipient subfolders
+- Renamed project to Chronify
 - Added output directory
+- Introduced generic folder structure (gesendet / empfangen)
+- Updated direction detection
 - Updated README
 - Updated CHANGELOG
+- Added .gitignore
 
 ## v4.1 - 2026-06-12
 - Preserved original word casing during topic extraction
