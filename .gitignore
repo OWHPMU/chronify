@@ -1,3 +1,15 @@
 *.eml
 *.pdf
 *.csv
+*.swp
+*.zip
+
+.DS_Store
+**/.DS_Store
+
+# User data folders (so you don't leak private emails/PDFs to GitHub!)
+00_Timeline/
+01_E-Mails_EML/
+02_Anhaenge_PDF/
+03_DATEV_Uploads/
+04_Sonstiges/
