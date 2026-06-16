@@ -2,26 +2,8 @@
     "Rechnungen": [
         "Rechnungen"
     ],
-    "Unterlagen": [
-        "Unterlagen"
-    ],
-    "Jahre": [
-        "Jahre"
-    ],
-    "Finanzamt": [
-        "Finanzamt"
-    ],
-    "Informationen": [
-        "Informationen"
-    ],
-    "Fragen": [
-        "Fragen"
-    ],
     "AirBnB": [
         "AirBnB"
-    ],
-    "Steuererklärungen": [
-        "Steuererklärungen"
     ],
     "Zahlungen": [
         "Zahlungen"
@@ -29,20 +11,8 @@
     "Aufstellung": [
         "Aufstellung"
     ],
-    "Steuererklärung": [
-        "Steuererklärung"
-    ],
     "Frist": [
         "Frist"
-    ],
-    "DATEV": [
-        "DATEV"
-    ],
-    "Jahres": [
-        "Jahres"
-    ],
-    "Einkommensteuererklärung": [
-        "Einkommensteuererklärung"
     ],
     "Wasser": [
         "Wasser"
@@ -50,26 +20,8 @@
     "Strom": [
         "Strom"
     ],
-    "Jahren": [
-        "Jahren"
-    ],
-    "Punkte": [
-        "Punkte"
-    ],
     "Bearbeitung": [
         "Bearbeitung"
-    ],
-    "Verfügung": [
-        "Verfügung"
-    ],
-    "Bescheid": [
-        "Bescheid"
-    ],
-    "Sollten": [
-        "Sollten"
-    ],
-    "Belege": [
-        "Belege"
     ],
     "Rechnung": [
         "Rechnung"
@@ -83,12 +35,6 @@
     "Selbstanzeige": [
         "Selbstanzeige"
     ],
-    "Beträge": [
-        "Beträge"
-    ],
-    "Daten": [
-        "Daten"
-    ],
     "Promenadenstraße": [
         "Promenadenstraße"
     ],
@@ -98,17 +44,11 @@
     "Fertigstellung": [
         "Fertigstellung"
     ],
-    "Upload": [
-        "Upload"
-    ],
     "Servicegebühren": [
         "Servicegebühren"
     ],
     "Umsatzsteuererklärung": [
         "Umsatzsteuererklärung"
-    ],
-    "Rückfragen": [
-        "Rückfragen"
     ],
     "Dedolphstraße": [
         "Dedolphstraße"
@@ -116,77 +56,23 @@
     "Wohnung": [
         "Wohnung"
     ],
-    "Meine": [
-        "Meine"
-    ],
-    "Einreichung": [
-        "Einreichung"
-    ],
-    "Portal": [
-        "Portal"
-    ],
     "Abgabe": [
         "Abgabe"
-    ],
-    "Anlagen": [
-        "Anlagen"
     ],
     "Vermietung": [
         "Vermietung"
     ],
-    "Dokumente": [
-        "Dokumente"
-    ],
-    "Begründung": [
-        "Begründung"
-    ],
     "Vermögensakademie": [
         "Vermögensakademie"
-    ],
-    "Hinsichtlich": [
-        "Hinsichtlich"
-    ],
-    "Anlage": [
-        "Anlage"
-    ],
-    "Steuern": [
-        "Steuern"
-    ],
-    "Einkommensteuererklärungen": [
-        "Einkommensteuererklärungen"
     ],
     "Prüfung": [
         "Prüfung"
     ],
-    "Antworten": [
-        "Antworten"
-    ],
     "Werbungskosten": [
         "Werbungskosten"
     ],
-    "Arbeit": [
-        "Arbeit"
-    ],
-    "Finanzamtes": [
-        "Finanzamtes"
-    ],
-    "Hintergrund": [
-        "Hintergrund"
-    ],
-    "Antwort": [
-        "Antwort"
-    ],
     "Monat": [
         "Monat"
-    ],
-    "Aussetzung": [
-        "Aussetzung"
-    ],
-    "Datev": [
-        "Datev"
-    ],
-    "Sicht": [
-        "Sicht"
     ],
     "Erstellung": [
         "Erstellung"
@@ -194,20 +80,8 @@
     "Zustimmungserklärungen": [
         "Zustimmungserklärungen"
     ],
-    "Essen": [
-        "Essen"
-    ],
-    "Rückmeldung": [
-        "Rückmeldung"
-    ],
     "Zustimmungserklärung": [
         "Zustimmungserklärung"
-    ],
-    "Tätigkeiten": [
-        "Tätigkeiten"
-    ],
-    "Damit": [
-        "Damit"
     ],
     "Anforderungen": [
         "Anforderungen"
@@ -233,9 +107,6 @@
     "Versorger": [
         "Versorger"
     ],
-    "Sofern": [
-        "Sofern"
-    ],
     "Nachricht": [
         "Nachricht"
     ],
@@ -260,35 +131,14 @@
     "Erklärungen": [
         "Erklärungen"
     ],
-    "Tätigkeit": [
-        "Tätigkeit"
-    ],
-    "Vielleicht": [
-        "Vielleicht"
-    ],
     "Umsatzsteuerbescheid": [
         "Umsatzsteuerbescheid"
-    ],
-    "Vater": [
-        "Vater"
     ],
     "Nachweis": [
         "Nachweis"
     ],
-    "Verbindung": [
-        "Verbindung"
-    ],
-    "Login": [
-        "Login"
-    ],
-    "Schreiben": [
-        "Schreiben"
-    ],
     "Beantwortung": [
         "Beantwortung"
-    ],
-    "Erklärung": [
-        "Erklärung"
     ],
     "Arbeitszimmer": [
         "Arbeitszimmer"
@@ -299,9 +149,6 @@
     "Übertragung": [
         "Übertragung"
     ],
-    "Einspruch": [
-        "Einspruch"
-    ],
     "Vollziehung": [
         "Vollziehung"
     ],
@@ -311,13 +158,145 @@
     "Verträge": [
         "Verträge"
     ],
-    "Urlaub": [
-        "Urlaub"
-    ],
     "Finanzseminar": [
         "Finanzseminar"
     ],
-    "Frage": [
-        "Frage"
+    "Grundlage": [
+        "Grundlage"
+    ],
+    "Konsequenzen": [
+        "Konsequenzen"
+    ],
+    "Berechnungen": [
+        "Berechnungen"
+    ],
+    "Betrag": [
+        "Betrag"
+    ],
+    "Sachverhalt": [
+        "Sachverhalt"
+    ],
+    "Datum": [
+        "Datum"
+    ],
+    "Photovoltaikanlage": [
+        "Photovoltaikanlage"
+    ],
+    "Abrechnungen": [
+        "Abrechnungen"
+    ],
+    "Keanu": [
+        "Keanu"
+    ],
+    "Holzhauer": [
+        "Holzhauer"
+    ],
+    "Dezember": [
+        "Dezember"
+    ],
+    "Korrektur": [
+        "Korrektur"
+    ],
+    "Kleinunternehmerregelung": [
+        "Kleinunternehmerregelung"
+    ],
+    "Einkommensteuer": [
+        "Einkommensteuer"
+    ],
+    "Einkommensteuerbescheid": [
+        "Einkommensteuerbescheid"
+    ],
+    "Download": [
+        "Download"
+    ],
+    "Besteuerungsgrundlagen": [
+        "Besteuerungsgrundlagen"
+    ],
+    "Steuerbescheid": [
+        "Steuerbescheid"
+    ],
+    "Nachprüfung": [
+        "Nachprüfung"
+    ],
+    "Einspruchsfrist": [
+        "Einspruchsfrist"
+    ],
+    "Gesamtnachzahlung": [
+        "Gesamtnachzahlung"
+    ],
+    "Zinsen": [
+        "Zinsen"
+    ],
+    "Nachzahlung": [
+        "Nachzahlung"
+    ],
+    "Nachzahlungsbetrag": [
+        "Nachzahlungsbetrag"
+    ],
+    "Konto": [
+        "Konto"
+    ],
+    "Steuer": [
+        "Steuer"
+    ],
+    "Antrag": [
+        "Antrag"
+    ],
+    "Bezahlung": [
+        "Bezahlung"
+    ],
+    "Auskunft": [
+        "Auskunft"
+    ],
+    "Aussteller": [
+        "Aussteller"
+    ],
+    "Kontoumsätze": [
+        "Kontoumsätze"
+    ],
+    "Erläuterung": [
+        "Erläuterung"
+    ],
+    "Zwecke": [
+        "Zwecke"
+    ],
+    "Erhalt": [
+        "Erhalt"
+    ],
+    "Behandlung": [
+        "Behandlung"
+    ],
+    "Immobilien": [
+        "Immobilien"
+    ],
+    "Bestätigung": [
+        "Bestätigung"
+    ],
+    "Verzögerungen": [
+        "Verzögerungen"
+    ],
+    "Einfluss": [
+        "Einfluss"
+    ],
+    "Hierzu": [
+        "Hierzu"
+    ],
+    "Sowohl": [
+        "Sowohl"
+    ],
+    "Kontoauszug": [
+        "Kontoauszug"
+    ],
+    "Beispiel": [
+        "Beispiel"
+    ],
+    "Objekt": [
+        "Objekt"
+    ],
+    "Vertragsnummer": [
+        "Vertragsnummer"
+    ],
+    "Hatten": [
+        "Hatten"
     ]
 }

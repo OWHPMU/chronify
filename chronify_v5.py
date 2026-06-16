@@ -74,7 +74,72 @@ BLACKLIST = {
     "Daten",
     "Verbindung",
     "Login",
-    "Schreiben"
+    "Schreiben",
+    "Punkte",
+    "Essen",
+    "Urlaub",
+    "Vielleicht",
+    "Frage*",
+    "Meine",
+    "DATEV",
+    "Datev",
+    "Antwort",
+    "Damit",
+    "Bescheid",
+    "Anlage",
+    "Sicht",
+    "Jahre",
+    "Sofern",
+    "Sollte",
+    "Inhalt",
+    "Hierüber",
+    "Steuererklärung",
+    "Steuern",
+    "Finanzamt*",
+    "Beträge",
+    "Dokumente",
+    "Unterlagen",
+    "Arbeit",
+    "Erklärung",
+    "Apple",
+    "Aussetzung",
+    "Vater",
+    "Weitere",
+    "Tätigkeit*",
+    "Rückmeldung",
+    "Begründung",
+    "Einreichung",
+    "Upload",
+    "Anlagen",
+    "Anmeldung",
+    "Portal",
+    "Store",
+    "Upload",
+    "Verfügung",
+    "Weitere",
+    "Steuererklärungen",
+    "Jahres",
+    "Einkommensteuererklärung*",
+    "Jahren",
+    "Belege",
+    "Rückfragen",
+    "Hinsichtlich",
+    "Antworten",
+    "Hintergrund",
+    "Einspruch",
+    "Hinzu",
+    "Einsprüche",
+    "Hinweise",
+    "Seiten",
+    "Lastschriftmandats",
+    "Gegen",
+    "Erledigung",
+    "Kanzlei",
+    "Hinblick",
+    "Auffassung",
+    "Kanzlei",
+    "Auffassung",
+    "Anbei"
 }
 
 def wildcard_to_regex(pattern):
@@ -518,31 +583,6 @@ with open(
 # topic_candidates.json
 # ==========================================
 
-# topic_candidates = {}
-
-# for word, count in all_words.most_common():
-
-#     if count < MIN_OCCURRENCES:
-#         continue
-
-#     topic_candidates[word] = count
-
-#     if len(topic_candidates) >= MAX_CANDIDATES:
-#         break
-
-# with open(
-#     TOPIC_CANDIDATES_FILE,
-#     "w",
-#     encoding="utf-8"
-# ) as f:
-
-#     json.dump(
-#         topic_candidates,
-#         f,
-#         indent=4,
-#         ensure_ascii=False
-#     )
-
 existing_candidates = {}
 
 
@@ -576,40 +616,30 @@ merged_candidates.update(topic_candidates)
 
 
 merged_candidates = {
-
     word: count
 
-    for word, count
-    in merged_candidates.items()
+    for word, count in merged_candidates.items()
 
     if not is_blacklisted(word)
 }
 
+# Update topic_candidates.json
+with open(
+    TOPIC_CANDIDATES_FILE,
+    "w",
+    encoding="utf-8"
+) as f:
+
+    json.dump(
+        merged_candidates,
+        f,
+        indent=4,
+        ensure_ascii=False
+    )
 
 # ==========================================
 # topics.json
 # ==========================================
-
-# if not os.path.exists(TOPICS_FILE):
-
-#     topics = {}
-
-#     for word in topic_candidates.keys():
-
-#         topics[word] = [word]
-
-#     with open(
-#         TOPICS_FILE,
-#         "w",
-#         encoding="utf-8"
-#     ) as f:
-
-#         json.dump(
-#             topics,
-#             f,
-#             indent=4,
-#             ensure_ascii=False
-#         )
 
 topics = {}
 
@@ -622,6 +652,13 @@ if os.path.exists(TOPICS_FILE):
     ) as f:
 
         topics = json.load(f)
+        topics = {w: k for w, k in topics.items() if not is_blacklisted(w)} # Remove blacklisted topics from final (user) topics
+        # topics = {
+        #     word: count
+        #     for word, count in topics.items()
+
+        #     if not is_blacklisted(word)
+        # } # Bugfix? Remove blacklisted topics from final (user) topics
 
 for word in merged_candidates.keys():
 
