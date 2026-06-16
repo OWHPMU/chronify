@@ -20,7 +20,7 @@ from email.utils import parsedate_to_datetime, parseaddr
 # KONFIGURATION
 # ==========================================
 
-SCRIPT_VERSION = "v4.2"
+SCRIPT_VERSION = "v5"
 
 ROOT_DIR = "./01_E-Mails_EML"
 
@@ -61,8 +61,20 @@ BLACKLIST = {
     "Alexandra",
     "Register",
     "Registergericht",
+    "Posteingang",
+    "Anmerkung",
     "Rathausstraße",
-    "Stolberg"
+    "Stolberg",
+    "Anhang",
+    "Archivierung",
+    "Angabe*",
+    "Finanzamt",
+    "Informationen",
+    "Sollten",
+    "Daten",
+    "Verbindung",
+    "Login",
+    "Schreiben"
 }
 
 def wildcard_to_regex(pattern):
@@ -314,8 +326,46 @@ def extract_candidate_words(text):
 
 
 # ==========================================
+# TOPIC MATCHING
+# ==========================================
+
+def load_topics():
+
+    if not os.path.exists(TOPICS_FILE):
+        return {}
+
+    with open(
+        TOPICS_FILE,
+        "r",
+        encoding="utf-8"
+    ) as f:
+
+        return json.load(f)
+
+
+def detect_topics(text, topics_dict):
+
+    found = []
+
+    text_lower = text.lower()
+
+    for topic, keywords in topics_dict.items():
+
+        for keyword in keywords:
+
+            if keyword.lower() in text_lower:
+
+                found.append(topic)
+                break
+
+    return "; ".join(sorted(found))
+
+
+# ==========================================
 # EML EINLESEN
 # ==========================================
+
+topics_dict = load_topics()
 
 rows = []
 
@@ -360,6 +410,12 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
             "Richtung":
                 get_direction(
                     str(eml_file.parent)
+                ),
+
+            "Topics":
+                detect_topics(
+                    mailtext,
+                    topics_dict
                 ),
 
             "Betreff":
@@ -432,6 +488,7 @@ fieldnames = [
     "Datum",
     "Zeit",
     "Richtung",
+    "Topics",
     "Betreff",
     "Text_Auszug",
     "Pfad",
@@ -461,6 +518,45 @@ with open(
 # topic_candidates.json
 # ==========================================
 
+# topic_candidates = {}
+
+# for word, count in all_words.most_common():
+
+#     if count < MIN_OCCURRENCES:
+#         continue
+
+#     topic_candidates[word] = count
+
+#     if len(topic_candidates) >= MAX_CANDIDATES:
+#         break
+
+# with open(
+#     TOPIC_CANDIDATES_FILE,
+#     "w",
+#     encoding="utf-8"
+# ) as f:
+
+#     json.dump(
+#         topic_candidates,
+#         f,
+#         indent=4,
+#         ensure_ascii=False
+#     )
+
+existing_candidates = {}
+
+
+if os.path.exists(TOPIC_CANDIDATES_FILE):
+
+    with open(
+        TOPIC_CANDIDATES_FILE,
+        "r",
+        encoding="utf-8"
+    ) as f:
+
+        existing_candidates = json.load(f)
+
+
 topic_candidates = {}
 
 for word, count in all_words.most_common():
@@ -473,43 +569,78 @@ for word, count in all_words.most_common():
     if len(topic_candidates) >= MAX_CANDIDATES:
         break
 
-with open(
-    TOPIC_CANDIDATES_FILE,
-    "w",
-    encoding="utf-8"
-) as f:
 
-    json.dump(
-        topic_candidates,
-        f,
-        indent=4,
-        ensure_ascii=False
-    )
+merged_candidates = dict(existing_candidates)
+
+merged_candidates.update(topic_candidates)
+
+
+merged_candidates = {
+
+    word: count
+
+    for word, count
+    in merged_candidates.items()
+
+    if not is_blacklisted(word)
+}
+
 
 # ==========================================
 # topics.json
 # ==========================================
 
-if not os.path.exists(TOPICS_FILE):
+# if not os.path.exists(TOPICS_FILE):
 
-    topics = {}
+#     topics = {}
 
-    for word in topic_candidates.keys():
+#     for word in topic_candidates.keys():
 
-        topics[word] = [word]
+#         topics[word] = [word]
+
+#     with open(
+#         TOPICS_FILE,
+#         "w",
+#         encoding="utf-8"
+#     ) as f:
+
+#         json.dump(
+#             topics,
+#             f,
+#             indent=4,
+#             ensure_ascii=False
+#         )
+
+topics = {}
+
+if os.path.exists(TOPICS_FILE):
 
     with open(
         TOPICS_FILE,
-        "w",
+        "r",
         encoding="utf-8"
     ) as f:
 
-        json.dump(
-            topics,
-            f,
-            indent=4,
-            ensure_ascii=False
-        )
+        topics = json.load(f)
+
+for word in merged_candidates.keys():
+
+    if word not in topics:
+
+        topics[word] = [word]
+
+with open(
+    TOPICS_FILE,
+    "w",
+    encoding="utf-8"
+) as f:
+
+    json.dump(
+        topics,
+        f,
+        indent=4,
+        ensure_ascii=False
+    )
 
 # ==========================================
 # AUSGABE

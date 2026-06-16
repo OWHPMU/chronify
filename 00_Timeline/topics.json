@@ -1,302 +1,323 @@
 {
-    "datev": [
-        "datev"
+    "Rechnungen": [
+        "Rechnungen"
     ],
-    "partner": [
-        "partner"
+    "Unterlagen": [
+        "Unterlagen"
     ],
-    "ihnen": [
-        "ihnen"
+    "Jahre": [
+        "Jahre"
     ],
-    "diese": [
-        "diese"
+    "Finanzamt": [
+        "Finanzamt"
     ],
-    "haben": [
-        "haben"
+    "Informationen": [
+        "Informationen"
     ],
-    "https": [
-        "https"
+    "Fragen": [
+        "Fragen"
     ],
-    "können": [
-        "können"
+    "AirBnB": [
+        "AirBnB"
     ],
-    "steuerberater": [
-        "steuerberater"
+    "Steuererklärungen": [
+        "Steuererklärungen"
     ],
-    "unter": [
-        "unter"
+    "Zahlungen": [
+        "Zahlungen"
     ],
-    "einer": [
-        "einer"
+    "Aufstellung": [
+        "Aufstellung"
     ],
-    "diesem": [
-        "diesem"
+    "Steuererklärung": [
+        "Steuererklärung"
     ],
-    "finanzamt": [
-        "finanzamt"
+    "Frist": [
+        "Frist"
     ],
-    "vertraulichkeit": [
-        "vertraulichkeit"
+    "DATEV": [
+        "DATEV"
     ],
-    "dieser": [
-        "dieser"
+    "Jahres": [
+        "Jahres"
     ],
-    "daten": [
-        "daten"
+    "Einkommensteuererklärung": [
+        "Einkommensteuererklärung"
     ],
-    "keine": [
-        "keine"
+    "Wasser": [
+        "Wasser"
     ],
-    "jahre": [
-        "jahre"
+    "Strom": [
+        "Strom"
     ],
-    "wurden": [
-        "wurden"
+    "Jahren": [
+        "Jahren"
     ],
-    "sollte": [
-        "sollte"
+    "Punkte": [
+        "Punkte"
     ],
-    "dennoch": [
-        "dennoch"
+    "Bearbeitung": [
+        "Bearbeitung"
     ],
-    "ihrem": [
-        "ihrem"
+    "Verfügung": [
+        "Verfügung"
     ],
-    "weitere": [
-        "weitere"
+    "Bescheid": [
+        "Bescheid"
     ],
-    "finden": [
-        "finden"
+    "Sollten": [
+        "Sollten"
     ],
-    "sollten": [
-        "sollten"
+    "Belege": [
+        "Belege"
     ],
-    "fragen": [
-        "fragen"
+    "Rechnung": [
+        "Rechnung"
     ],
-    "schäden": [
-        "schäden"
+    "Umsätze": [
+        "Umsätze"
     ],
-    "system": [
-        "system"
+    "Zuordnung": [
+        "Zuordnung"
     ],
-    "erhalten": [
-        "erhalten"
+    "Selbstanzeige": [
+        "Selbstanzeige"
     ],
-    "zahlungen": [
-        "zahlungen"
+    "Beträge": [
+        "Beträge"
     ],
-    "email": [
-        "email"
+    "Daten": [
+        "Daten"
     ],
-    "ihrer": [
-        "ihrer"
+    "Promenadenstraße": [
+        "Promenadenstraße"
     ],
-    "aufstellung": [
-        "aufstellung"
+    "Umsatzsteuer": [
+        "Umsatzsteuer"
     ],
-    "bettina": [
-        "bettina"
+    "Fertigstellung": [
+        "Fertigstellung"
     ],
-    "documents": [
-        "documents"
+    "Upload": [
+        "Upload"
     ],
-    "internet": [
-        "internet"
+    "Servicegebühren": [
+        "Servicegebühren"
     ],
-    "verschlüsselung": [
-        "verschlüsselung"
+    "Umsatzsteuererklärung": [
+        "Umsatzsteuererklärung"
     ],
-    "absender": [
-        "absender"
+    "Rückfragen": [
+        "Rückfragen"
     ],
-    "strom": [
-        "strom"
+    "Dedolphstraße": [
+        "Dedolphstraße"
     ],
-    "benötigen": [
-        "benötigen"
+    "Wohnung": [
+        "Wohnung"
     ],
-    "meine": [
-        "meine"
+    "Meine": [
+        "Meine"
     ],
-    "partnerschaft": [
-        "partnerschaft"
+    "Einreichung": [
+        "Einreichung"
     ],
-    "steuererklärungen": [
-        "steuererklärungen"
+    "Portal": [
+        "Portal"
     ],
-    "unsere": [
-        "unsere"
+    "Abgabe": [
+        "Abgabe"
     ],
-    "registergericht": [
-        "registergericht"
+    "Anlagen": [
+        "Anlagen"
     ],
-    "mailto": [
-        "mailto"
+    "Vermietung": [
+        "Vermietung"
     ],
-    "freundlichen": [
-        "freundlichen"
+    "Dokumente": [
+        "Dokumente"
     ],
-    "anhang": [
-        "anhang"
+    "Begründung": [
+        "Begründung"
     ],
-    "center": [
-        "center"
+    "Vermögensakademie": [
+        "Vermögensakademie"
     ],
-    "viewer": [
-        "viewer"
+    "Hinsichtlich": [
+        "Hinsichtlich"
     ],
-    "seppmail": [
-        "seppmail"
+    "Anlage": [
+        "Anlage"
     ],
-    "rathausstraße": [
-        "rathausstraße"
+    "Steuern": [
+        "Steuern"
     ],
-    "stolberg": [
-        "stolberg"
+    "Einkommensteuererklärungen": [
+        "Einkommensteuererklärungen"
     ],
-    "mails": [
-        "mails"
+    "Prüfung": [
+        "Prüfung"
     ],
-    "eventuell": [
-        "eventuell"
+    "Antworten": [
+        "Antworten"
     ],
-    "vertrauliche": [
-        "vertrauliche"
+    "Werbungskosten": [
+        "Werbungskosten"
     ],
-    "nürnberg": [
-        "nürnberg"
+    "Arbeit": [
+        "Arbeit"
     ],
-    "umsatzsteuer": [
-        "umsatzsteuer"
+    "Finanzamtes": [
+        "Finanzamtes"
     ],
-    "grüßen": [
-        "grüßen"
+    "Hintergrund": [
+        "Hintergrund"
     ],
-    "gehen": [
-        "gehen"
+    "Antwort": [
+        "Antwort"
     ],
-    "wasser": [
-        "wasser"
+    "Monat": [
+        "Monat"
     ],
-    "airbnb": [
-        "airbnb"
+    "Aussetzung": [
+        "Aussetzung"
     ],
-    "kanzlei": [
-        "kanzlei"
+    "Datev": [
+        "Datev"
     ],
-    "sobald": [
-        "sobald"
+    "Sicht": [
+        "Sicht"
     ],
-    "gerne": [
-        "gerne"
+    "Erstellung": [
+        "Erstellung"
     ],
-    "schriftlich": [
-        "schriftlich"
+    "Zustimmungserklärungen": [
+        "Zustimmungserklärungen"
     ],
-    "worden": [
-        "worden"
+    "Essen": [
+        "Essen"
     ],
-    "angaben": [
-        "angaben"
+    "Rückmeldung": [
+        "Rückmeldung"
     ],
-    "hinweise": [
-        "hinweise"
+    "Zustimmungserklärung": [
+        "Zustimmungserklärung"
     ],
-    "relevanten": [
-        "relevanten"
+    "Tätigkeiten": [
+        "Tätigkeiten"
     ],
-    "enthalten": [
-        "enthalten"
+    "Damit": [
+        "Damit"
     ],
-    "zumindest": [
-        "zumindest"
+    "Anforderungen": [
+        "Anforderungen"
     ],
-    "übernommen": [
-        "übernommen"
+    "Airbnb": [
+        "Airbnb"
     ],
-    "fertigen": [
-        "fertigen"
+    "Anteil": [
+        "Anteil"
     ],
-    "welche": [
-        "welche"
+    "Anzahl": [
+        "Anzahl"
     ],
-    "promenadenstraße": [
-        "promenadenstraße"
+    "Unterhaltszahlung": [
+        "Unterhaltszahlung"
     ],
-    "information": [
-        "information"
+    "Übersicht": [
+        "Übersicht"
     ],
-    "folge": [
-        "folge"
+    "Energiekosten": [
+        "Energiekosten"
     ],
-    "zustellung": [
-        "zustellung"
+    "Versorger": [
+        "Versorger"
     ],
-    "alleine": [
-        "alleine"
+    "Sofern": [
+        "Sofern"
     ],
-    "persönlich": [
-        "persönlich"
+    "Nachricht": [
+        "Nachricht"
     ],
-    "bestätigung": [
-        "bestätigung"
+    "Zusammenhang": [
+        "Zusammenhang"
     ],
-    "anforderung": [
-        "anforderung"
+    "Mitteilung": [
+        "Mitteilung"
     ],
-    "entstehen": [
-        "entstehen"
+    "Unterzeichnung": [
+        "Unterzeichnung"
     ],
-    "bescheid": [
-        "bescheid"
+    "Hinweis": [
+        "Hinweis"
     ],
-    "jahres": [
-        "jahres"
+    "Nachweise": [
+        "Nachweise"
     ],
-    "abschläge": [
-        "abschläge"
+    "Monate": [
+        "Monate"
     ],
-    "verlassen": [
-        "verlassen"
+    "Erklärungen": [
+        "Erklärungen"
     ],
-    "gewahrt": [
-        "gewahrt"
+    "Tätigkeit": [
+        "Tätigkeit"
     ],
-    "maßnahmen": [
-        "maßnahmen"
+    "Vielleicht": [
+        "Vielleicht"
     ],
-    "stand": [
-        "stand"
+    "Umsatzsteuerbescheid": [
+        "Umsatzsteuerbescheid"
     ],
-    "weder": [
-        "weder"
+    "Vater": [
+        "Vater"
     ],
-    "fehlenden": [
-        "fehlenden"
+    "Nachweis": [
+        "Nachweis"
     ],
-    "dadurch": [
-        "dadurch"
+    "Verbindung": [
+        "Verbindung"
     ],
-    "deren": [
-        "deren"
+    "Login": [
+        "Login"
     ],
-    "informieren": [
-        "informieren"
+    "Schreiben": [
+        "Schreiben"
     ],
-    "unverzüglich": [
-        "unverzüglich"
+    "Beantwortung": [
+        "Beantwortung"
     ],
-    "kopie": [
-        "kopie"
+    "Erklärung": [
+        "Erklärung"
     ],
-    "weitergabe": [
-        "weitergabe"
+    "Arbeitszimmer": [
+        "Arbeitszimmer"
     ],
-    "nachrichten": [
-        "nachrichten"
+    "Vorbehalt": [
+        "Vorbehalt"
     ],
-    "anhänge": [
-        "anhänge"
+    "Übertragung": [
+        "Übertragung"
+    ],
+    "Einspruch": [
+        "Einspruch"
+    ],
+    "Vollziehung": [
+        "Vollziehung"
+    ],
+    "Vorjahres": [
+        "Vorjahres"
+    ],
+    "Verträge": [
+        "Verträge"
+    ],
+    "Urlaub": [
+        "Urlaub"
+    ],
+    "Finanzseminar": [
+        "Finanzseminar"
+    ],
+    "Frage": [
+        "Frage"
     ]
 }
