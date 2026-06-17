@@ -139,7 +139,10 @@ BLACKLIST = {
     "Auffassung",
     "Kanzlei",
     "Auffassung",
-    "Anbei"
+    "Anbei",
+    "Hatten",
+    "Nachricht",
+    "Sowohl"
 }
 
 def wildcard_to_regex(pattern):
@@ -644,21 +647,14 @@ with open(
 topics = {}
 
 if os.path.exists(TOPICS_FILE):
-
-    with open(
-        TOPICS_FILE,
-        "r",
-        encoding="utf-8"
-    ) as f:
-
+    with open(TOPICS_FILE, "r", encoding="utf-8") as f:
         topics = json.load(f)
-        topics = {w: k for w, k in topics.items() if not is_blacklisted(w)} # Remove blacklisted topics from final (user) topics
-        # topics = {
-        #     word: count
-        #     for word, count in topics.items()
 
-        #     if not is_blacklisted(word)
-        # } # Bugfix? Remove blacklisted topics from final (user) topics
+        topics = {
+            word: count
+            for word, count in topics.items()
+            if not is_blacklisted(word)
+        }
 
 for word in merged_candidates.keys():
 

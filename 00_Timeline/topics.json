@@ -107,9 +107,6 @@
     "Versorger": [
         "Versorger"
     ],
-    "Nachricht": [
-        "Nachricht"
-    ],
     "Zusammenhang": [
         "Zusammenhang"
     ],
@@ -281,9 +278,6 @@
     "Hierzu": [
         "Hierzu"
     ],
-    "Sowohl": [
-        "Sowohl"
-    ],
     "Kontoauszug": [
         "Kontoauszug"
     ],
@@ -296,7 +290,13 @@
     "Vertragsnummer": [
         "Vertragsnummer"
     ],
-    "Hatten": [
-        "Hatten"
+    "Kapitalerträge": [
+        "Kapitalerträge"
+    ],
+    "Zinseinnahmen": [
+        "Zinseinnahmen"
+    ],
+    "Dividendeneinnahmen": [
+        "Dividendeneinnahmen"
     ]
 }

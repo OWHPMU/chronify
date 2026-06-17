@@ -35,7 +35,6 @@
     "Übersicht": 6,
     "Energiekosten": 6,
     "Versorger": 6,
-    "Nachricht": 5,
     "Zusammenhang": 5,
     "Mitteilung": 5,
     "Unterzeichnung": 5,
@@ -93,10 +92,11 @@
     "Verzögerungen": 3,
     "Einfluss": 3,
     "Hierzu": 3,
-    "Sowohl": 3,
     "Kontoauszug": 3,
     "Beispiel": 3,
     "Objekt": 3,
     "Vertragsnummer": 3,
-    "Hatten": 3
+    "Kapitalerträge": 3,
+    "Zinseinnahmen": 3,
+    "Dividendeneinnahmen": 3
 }
