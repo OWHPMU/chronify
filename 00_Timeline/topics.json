@@ -116,9 +116,6 @@
     "Unterzeichnung": [
         "Unterzeichnung"
     ],
-    "Hinweis": [
-        "Hinweis"
-    ],
     "Nachweise": [
         "Nachweise"
     ],
@@ -133,9 +130,6 @@
     ],
     "Nachweis": [
         "Nachweis"
-    ],
-    "Beantwortung": [
-        "Beantwortung"
     ],
     "Arbeitszimmer": [
         "Arbeitszimmer"
@@ -203,9 +197,6 @@
     "Einkommensteuerbescheid": [
         "Einkommensteuerbescheid"
     ],
-    "Download": [
-        "Download"
-    ],
     "Besteuerungsgrundlagen": [
         "Besteuerungsgrundlagen"
     ],
@@ -233,9 +224,6 @@
     "Konto": [
         "Konto"
     ],
-    "Steuer": [
-        "Steuer"
-    ],
     "Antrag": [
         "Antrag"
     ],
@@ -257,9 +245,6 @@
     "Zwecke": [
         "Zwecke"
     ],
-    "Erhalt": [
-        "Erhalt"
-    ],
     "Behandlung": [
         "Behandlung"
     ],
@@ -274,9 +259,6 @@
     ],
     "Einfluss": [
         "Einfluss"
-    ],
-    "Hierzu": [
-        "Hierzu"
     ],
     "Kontoauszug": [
         "Kontoauszug"
@@ -298,5 +280,23 @@
     ],
     "Dividendeneinnahmen": [
         "Dividendeneinnahmen"
+    ],
+    "Arbeit": [
+        "Arbeit"
+    ],
+    "Urlaub": [
+        "Urlaub"
+    ],
+    "Jahressteuerbescheinigungen": [
+        "Jahressteuerbescheinigungen"
+    ],
+    "Jahreserträgnisaufstellungen": [
+        "Jahreserträgnisaufstellungen"
+    ],
+    "Strafverfahren": [
+        "Strafverfahren"
+    ],
+    "Überlegungen": [
+        "Überlegungen"
     ]
 }

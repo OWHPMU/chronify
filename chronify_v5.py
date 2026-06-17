@@ -48,127 +48,40 @@ MAX_CANDIDATES = 100
 # BLACKLIST - exclude from topic detection
 # ==========================================
 
-BLACKLIST = {
-    "Ihn*",
-    "Ihr*",
-    "Steuerberater*",
-    "*PARTNER*",
-    "Bitte",
-    "Hallo",
-    "Betzler",
-    "Forne",
-    "Forné",
-    "Alexandra",
-    "Register",
-    "Registergericht",
-    "Posteingang",
-    "Anmerkung",
-    "Rathausstraße",
-    "Stolberg",
-    "Anhang",
-    "Archivierung",
-    "Angabe*",
-    "Finanzamt",
-    "Informationen",
-    "Sollten",
-    "Daten",
-    "Verbindung",
-    "Login",
-    "Schreiben",
-    "Punkte",
-    "Essen",
-    "Urlaub",
-    "Vielleicht",
-    "Frage*",
-    "Meine",
-    "DATEV",
-    "Datev",
-    "Antwort",
-    "Damit",
-    "Bescheid",
-    "Anlage",
-    "Sicht",
-    "Jahre",
-    "Sofern",
-    "Sollte",
-    "Inhalt",
-    "Hierüber",
-    "Steuererklärung",
-    "Steuern",
-    "Finanzamt*",
-    "Beträge",
-    "Dokumente",
-    "Unterlagen",
-    "Arbeit",
-    "Erklärung",
-    "Apple",
-    "Aussetzung",
-    "Vater",
-    "Weitere",
-    "Tätigkeit*",
-    "Rückmeldung",
-    "Begründung",
-    "Einreichung",
-    "Upload",
-    "Anlagen",
-    "Anmeldung",
-    "Portal",
-    "Store",
-    "Upload",
-    "Verfügung",
-    "Weitere",
-    "Steuererklärungen",
-    "Jahres",
-    "Einkommensteuererklärung*",
-    "Jahren",
-    "Belege",
-    "Rückfragen",
-    "Hinsichtlich",
-    "Antworten",
-    "Hintergrund",
-    "Einspruch",
-    "Hinzu",
-    "Einsprüche",
-    "Hinweise",
-    "Seiten",
-    "Lastschriftmandats",
-    "Gegen",
-    "Erledigung",
-    "Kanzlei",
-    "Hinblick",
-    "Auffassung",
-    "Kanzlei",
-    "Auffassung",
-    "Anbei",
-    "Hatten",
-    "Nachricht",
-    "Sowohl"
-}
+BLACKLIST_FILE = "blacklist.txt"
+
+
+def load_blacklist(filepath):
+    # Lädt die Blacklist aus einer Textdatei und entfernt leere Zeilen.
+    if not os.path.exists(filepath):
+        # Falls die Datei fehlt, wird eine leere Blacklist genutzt; todo: fallback to default blacklist?
+        return set()
+
+    with open(filepath, "r", encoding="utf-8") as f:
+        # Liest Zeilen, entfernt Whitespace (\n) und ignoriert leere Zeilen
+        return {line.strip() for line in f if line.strip()}
+
+
+# Blacklist beim App-Start aus der Datei einlesen
+BLACKLIST = load_blacklist(BLACKLIST_FILE)
+
 
 def wildcard_to_regex(pattern):
-
     escaped = re.escape(pattern)
-
     escaped = escaped.replace(r"\*", ".*")
-
     return f"^{escaped}$"
 
 
+# Regex-Kompatibilität direkt aus der eingelesenen Menge erstellen
 BLACKLIST_REGEX = [
-    re.compile(
-        wildcard_to_regex(pattern),
-        re.IGNORECASE
-    )
-    for pattern in BLACKLIST
+    re.compile(wildcard_to_regex(pattern), re.IGNORECASE) for pattern in BLACKLIST
 ]
 
+
 def is_blacklisted(word):
-
     for regex in BLACKLIST_REGEX:
-
         if regex.match(word):
             return True
-
     return False
 
 
@@ -398,17 +311,23 @@ def extract_candidate_words(text):
 # ==========================================
 
 def load_topics():
-
     if not os.path.exists(TOPICS_FILE):
         return {}
 
-    with open(
-        TOPICS_FILE,
-        "r",
-        encoding="utf-8"
-    ) as f:
+    with open(TOPICS_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
 
-        return json.load(f)
+    # Filter the loaded topics directly using the blacklist
+    cleaned_topics = {
+        word: count for word, count in data.items() if not is_blacklisted(word)
+    }
+
+    # If any words have been deleted, save the cleaned-up version right away
+    if len(cleaned_topics) != len(data):
+        with open(TOPICS_FILE, "w", encoding="utf-8") as f:
+            json.dump(cleaned_topics, f, ensure_ascii=False, indent=4)
+
+    return cleaned_topics
 
 
 def detect_topics(text, topics_dict):
@@ -650,11 +569,11 @@ if os.path.exists(TOPICS_FILE):
     with open(TOPICS_FILE, "r", encoding="utf-8") as f:
         topics = json.load(f)
 
-        topics = {
-            word: count
-            for word, count in topics.items()
-            if not is_blacklisted(word)
-        }
+        # topics = { # todo: Remove? -> yes, after some more testing is done
+        #     word: count
+        #     for word, count in topics.items()
+        #     if not is_blacklisted(word)
+        # }
 
 for word in merged_candidates.keys():
 
