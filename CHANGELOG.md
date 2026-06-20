@@ -1,5 +1,14 @@
 # Chronify
 
+## v5 - 2026-06-20
+- Split blacklist to separate file
+- Update existing topic candidates if new topics with new EMLs have been added
+- Merge updated topic candidates into topics.json
+- Apply blacklist to topics
+- Update and dump topic candidates and topics when blacklist changes
+- Sort topic candidates and topics
+- Revert sort order when writing csv 
+
 ## v4.2 - 2026-06-13
 Refactoring
 - Renamed project to Chronify
