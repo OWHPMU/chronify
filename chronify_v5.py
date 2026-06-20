@@ -551,9 +551,11 @@ with open(
     "w",
     encoding="utf-8"
 ) as f:
+    # Sort topic candidated alphabetically right before saving
+    sorted_candidates = dict(sorted(merged_candidates.items()))
 
     json.dump(
-        merged_candidates,
+        sorted_candidates,
         f,
         indent=4,
         ensure_ascii=False
