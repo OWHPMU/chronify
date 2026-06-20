@@ -95,9 +95,7 @@ def safe_header(msg, name):
 
 
 def parse_date(msg):
-
     try:
-
         date_str = msg.get("Date")
 
         if not date_str:
@@ -119,7 +117,6 @@ def get_email_address(header_value):
 
 
 def get_direction(path_str):
-
     path_lower = path_str.lower()
 
     if "gesendet" in path_lower:
@@ -136,17 +133,13 @@ def get_direction(path_str):
 # ==========================================
 
 def extract_text(msg):
-
     try:
-
         if msg.is_multipart():
 
             parts = []
 
             for part in msg.walk():
-
                 if part.get_content_type() == "text/plain":
-
                     try:
                         text = part.get_content()
 
@@ -159,7 +152,6 @@ def extract_text(msg):
             return "\n".join(parts).strip()
 
         else:
-
             try:
                 return str(msg.get_content()).strip()
             except Exception:
@@ -170,7 +162,6 @@ def extract_text(msg):
 
 
 def clean_mail_text(text):
-
     if not text:
         return ""
 
@@ -197,7 +188,6 @@ def clean_mail_text(text):
     # ----------------------------------
 
     reply_markers = [
-
         "-----Original-Nachricht-----",
         "Von:",
         "Gesendet:",
@@ -210,7 +200,6 @@ def clean_mail_text(text):
     cleaned_lines = []
 
     for line in lines:
-
         if any(
             marker in line
             for marker in reply_markers
@@ -226,7 +215,6 @@ def clean_mail_text(text):
     # ----------------------------------
 
     disclaimer_markers = [
-
         "SEPPmail",
         "Viewer",
         "Vertraulichkeit",
@@ -235,7 +223,6 @@ def clean_mail_text(text):
     ]
 
     for marker in disclaimer_markers:
-
         pos = text.lower().find(
             marker.lower()
         )
@@ -248,7 +235,6 @@ def clean_mail_text(text):
     # ----------------------------------
 
     signature_markers = [
-
         "Mit freundlichen Grüßen",
         "Mit freundlichem Gruß",
         "Freundliche Grüße",
@@ -256,7 +242,6 @@ def clean_mail_text(text):
     ]
 
     for marker in signature_markers:
-
         pos = text.lower().find(
             marker.lower()
         )
@@ -268,7 +253,6 @@ def clean_mail_text(text):
 
 
 def create_preview(text):
-
     text = " ".join(text.split())
 
     if len(text) <= TEXT_PREVIEW_LENGTH:
@@ -282,7 +266,6 @@ def create_preview(text):
 # ==========================================
 
 def extract_candidate_words(text):
-
     words = re.findall(
         r"[A-Za-zÄÖÜäöüß]{5,}",
         text
@@ -291,7 +274,6 @@ def extract_candidate_words(text):
     result = []
 
     for word in words:
-
         if len(word) < MIN_WORD_LENGTH:
             continue
 
@@ -325,25 +307,19 @@ def load_topics():
     # If any words have been deleted, save the cleaned-up version right away
     if len(cleaned_topics) != len(data):
         with open(TOPICS_FILE, "w", encoding="utf-8") as f:
-            # HIER
-
             json.dump(cleaned_topics, f, ensure_ascii=False, indent=4)
 
     return cleaned_topics
 
 
 def detect_topics(text, topics_dict):
-
     found = []
 
     text_lower = text.lower()
 
     for topic, keywords in topics_dict.items():
-
         for keyword in keywords:
-
             if keyword.lower() in text_lower:
-
                 found.append(topic)
                 break
 
@@ -361,9 +337,7 @@ rows = []
 all_words = Counter()
 
 for eml_file in Path(ROOT_DIR).rglob("*.eml"):
-
     try:
-
         with open(eml_file, "rb") as f:
             msg = BytesParser(
                 policy=policy.default
@@ -387,7 +361,6 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
         )
 
         rows.append({
-
             "Datum":
                 dt.strftime("%Y-%m-%d")
                 if dt else "",
@@ -443,7 +416,6 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
         })
 
     except Exception as ex:
-
         print()
         print("=" * 80)
         print("FEHLER BEIM EINLESEN")
@@ -473,7 +445,6 @@ os.makedirs(
 )
 
 fieldnames = [
-
     "Datum",
     "Zeit",
     "Richtung",
@@ -494,7 +465,6 @@ with open(
     newline="",
     encoding="utf-8-sig"
 ) as f:
-
     writer = csv.DictWriter(
         f,
         fieldnames=fieldnames
@@ -511,20 +481,17 @@ existing_candidates = {}
 
 
 if os.path.exists(TOPIC_CANDIDATES_FILE):
-
     with open(
         TOPIC_CANDIDATES_FILE,
         "r",
         encoding="utf-8"
     ) as f:
-
         existing_candidates = json.load(f)
 
 
 topic_candidates = {}
 
 for word, count in all_words.most_common():
-
     if count < MIN_OCCURRENCES:
         continue
 
@@ -573,16 +540,8 @@ if os.path.exists(TOPICS_FILE):
     with open(TOPICS_FILE, "r", encoding="utf-8") as f:
         topics = json.load(f)
 
-        # topics = { # todo: Remove? -> yes, after some more testing is done
-        #     word: count
-        #     for word, count in topics.items()
-        #     if not is_blacklisted(word)
-        # }
-
 for word in merged_candidates.keys():
-
     if word not in topics:
-
         topics[word] = [word]
 
 with open(
@@ -612,9 +571,6 @@ print("=" * 80)
 
 print()
 print(f"EMLs gefunden: {len(rows)}")
-print()
-print("CSV erzeugt:")
-print(OUTPUT_CSV)
 
 print()
 print("Topic-Kandidaten:")
@@ -624,6 +580,10 @@ if os.path.exists(TOPICS_FILE):
     print()
     print("Topics:")
     print(TOPICS_FILE)
+
+print()
+print("CSV erzeugt:")
+print(OUTPUT_CSV)
 
 print()
 print("=" * 80)
