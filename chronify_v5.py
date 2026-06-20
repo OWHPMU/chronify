@@ -325,6 +325,8 @@ def load_topics():
     # If any words have been deleted, save the cleaned-up version right away
     if len(cleaned_topics) != len(data):
         with open(TOPICS_FILE, "w", encoding="utf-8") as f:
+            # HIER
+
             json.dump(cleaned_topics, f, ensure_ascii=False, indent=4)
 
     return cleaned_topics
@@ -588,9 +590,11 @@ with open(
     "w",
     encoding="utf-8"
 ) as f:
+    # Sort topics alphabetically right before saving
+    sorted_topics = dict(sorted(topics.items()))
 
     json.dump(
-        topics,
+        sorted_topics, # topics
         f,
         indent=4,
         ensure_ascii=False
