@@ -432,7 +432,8 @@ rows.sort(
     key=lambda r: (
         r["Datum"],
         r["Zeit"]
-    )
+    ),
+    reverse=True
 )
 
 # ==========================================
