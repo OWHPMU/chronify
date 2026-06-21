@@ -401,10 +401,10 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
                 attachments.append(filename)
 
                 pdf_rows.append({
-                    "EML_vom":
+                    "Anhang_vom":
                         dt.strftime("%d.%m.%Y"),
 
-                    "Zeit":
+                    "Uhrzeit":
                         dt.strftime("%H:%M"),
 
                     "Richtung":
@@ -420,11 +420,11 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
                 })
 
         rows.append({
-            "Datum":
+            "E_Mail_vom":
                 dt.strftime("%d.%m.%Y")
                 if dt else "",
 
-            "Zeit":
+            "Uhrzeit":
                 dt.strftime("%H:%M")
                 if dt else "",
 
@@ -489,8 +489,8 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
 
 rows.sort(
     key=lambda r: (
-        r["Datum"],
-        r["Zeit"]
+        r["E_Mail_vom"],
+        r["Uhrzeit"]
     ),
     reverse=True
 )
@@ -531,8 +531,8 @@ os.makedirs(
 
 # Write EML to CSV
 fieldnames = [
-    "Datum",
-    "Zeit",
+    "E_Mail_vom",
+    "Uhrzeit",
     "Richtung",
     "Topics",
     "Betreff",
@@ -561,8 +561,8 @@ with open(
 
     # Write PDF attachmenets list to PDF-attachments-CSV
     pdf_fieldnames = [
-        "EML_vom",
-        "Zeit",
+        "Anhang_vom",
+        "Uhrzeit",
         "Richtung",
         "Dateiname",
         "EML_Dateiname"
