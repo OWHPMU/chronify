@@ -10,7 +10,6 @@ from email import policy
 from email.parser import BytesParser
 from email.utils import parsedate_to_datetime, parseaddr
 
-from datetime import datetime
 from pypdf import PdfReader
 
 # =========================================================================================
@@ -402,13 +401,16 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
                 attachments.append(filename)
 
                 pdf_rows.append({
+                    "EML_vom":
+                        dt.strftime("%d.%m.%Y"),
+
+                    "Zeit":
+                        dt.strftime("%H:%M"),
+
                     "Richtung":
                         get_direction(
                             str(eml_file.parent)
                         ),
-
-                    "EML_vom":
-                        dt.strftime("%Y-%m-%d %H:%M:%S"),
 
                     "Dateiname":
                         filename,
@@ -419,11 +421,11 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
 
         rows.append({
             "Datum":
-                dt.strftime("%Y-%m-%d")
+                dt.strftime("%d.%m.%Y")
                 if dt else "",
 
             "Zeit":
-                dt.strftime("%H:%M:%S")
+                dt.strftime("%H:%M")
                 if dt else "",
 
             "Richtung":
@@ -559,8 +561,9 @@ with open(
 
     # Write PDF attachmenets list to PDF-attachments-CSV
     pdf_fieldnames = [
-     "Richtung",
         "EML_vom",
+        "Zeit",
+        "Richtung",
         "Dateiname",
         "EML_Dateiname"
     ]
