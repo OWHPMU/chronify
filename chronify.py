@@ -402,13 +402,16 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
                 attachments.append(filename)
 
                 pdf_rows.append({
-                    "Dateiname":
-                        filename,
-
                     "Richtung":
                         get_direction(
                             str(eml_file.parent)
                         ),
+
+                    "EML_vom":
+                        dt.strftime("%Y-%m-%d %H:%M:%S"),
+
+                    "Dateiname":
+                        filename,
 
                     "EML_Dateiname":
                         eml_file.name
@@ -556,8 +559,9 @@ with open(
 
     # Write PDF attachmenets list to PDF-attachments-CSV
     pdf_fieldnames = [
+     "Richtung",
+        "EML_vom",
         "Dateiname",
-        "Richtung",
         "EML_Dateiname"
     ]
 
