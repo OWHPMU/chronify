@@ -389,33 +389,19 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
             extract_candidate_words(mailtext)
         )
 
-        # Read pdf-attachment list
-        # attachments = []
-
-        # for part in msg.walk():
-
-        #     filename = part.get_filename()
-
-        #     if not filename:
-        #         continue
-
-        #     if filename.lower().endswith(".pdf"):
-        #         attachments.append(filename)
+        # Collect pdf attachments
         attachments = []
 
         for part in msg.walk():
-
             filename = part.get_filename()
 
             if not filename:
                 continue
 
             if filename.lower().endswith(".pdf"):
-
                 attachments.append(filename)
 
                 pdf_rows.append({
-
                     "Dateiname":
                         filename,
 
@@ -493,56 +479,6 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
         print()
 
 # ==========================================
-# PDF EINLESEN
-# ==========================================
-
-# pdf_rows = []
-
-# for pdf_file in Path(PDF_ROOT_DIR).rglob("*.pdf"):
-
-#     try:
-
-#         # dt = datetime.fromtimestamp(
-#         #     pdf_file.stat().st_mtime
-#         # )
-
-#         pdf_text = extract_pdf_text(
-#             str(pdf_file)
-#         )
-
-#         pdf_rows.append({
-#             "Dateiname":
-#                 pdf_file.name,
-
-#             "Richtung":
-#                 get_direction(
-#                     str(pdf_file.parent)
-#                 ),
-
-#             # "EML-Dateiname":
-#             #     eml_file.name,
-
-#             "Text_Auszug":
-#                 create_preview(pdf_text)
-
-
-#             # "Topics":
-#             #     ...
-
-#         })
-
-#     except Exception as ex:
-
-#         print()
-#         print("=" * 80)
-#         print("FEHLER BEIM PDF EINLESEN")
-#         print(pdf_file)
-#         print(ex)
-#         print("=" * 80)
-#         print()
-
-
-# ==========================================
 # EML-CSV SORTIEREN
 # ==========================================
 
@@ -553,16 +489,6 @@ rows.sort(
     ),
     reverse=True
 )
-
-
-# todo Sort by name?
-# pdf_rows.sort(
-#     key=lambda r: (
-#         r["Datum"],
-#         r["Zeit"]
-#     ),
-#     reverse=True
-# )
 
 # ==========================================
 # PDF-Text extrahieren
@@ -590,7 +516,7 @@ rows.sort(
 #         return ""
 
 # ==========================================
-# EML-CSV SCHREIBEN
+# EML-CSV UND PDF-ATTACHMENTS-CSV SCHREIBEN
 # ==========================================
 
 os.makedirs(
@@ -598,6 +524,7 @@ os.makedirs(
     exist_ok=True
 )
 
+# Write EML to CSV
 fieldnames = [
     "Datum",
     "Zeit",
@@ -627,32 +554,8 @@ with open(
     writer.writeheader()
     writer.writerows(rows)
 
-
-#     pdf_fieldnames = [
-#         "Dateiname",
-#         "Richtung",
-# #        "EML-Dateiname",
-#         "Text_Auszug"
-# #        "Topics"
-#     ]
-
-#     with open(
-#         PDF_OUTPUT_CSV,
-#         "w",
-#         newline="",
-#         encoding="utf-8-sig"
-#     ) as f:
-
-#         writer = csv.DictWriter(
-#             f,
-#             fieldnames=pdf_fieldnames
-#         )
-
-#         writer.writeheader()
-#         writer.writerows(pdf_rows)
-
+    # Write PDF attachmenets list to PDF-attachments-CSV
     pdf_fieldnames = [
-
         "Dateiname",
         "Richtung",
         "EML_Dateiname"
