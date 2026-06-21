@@ -462,32 +462,33 @@ for pdf_file in Path(PDF_ROOT_DIR).rglob("*.pdf"):
 
     try:
 
-        dt = datetime.fromtimestamp(
-            pdf_file.stat().st_mtime
-        )
+        # dt = datetime.fromtimestamp(
+        #     pdf_file.stat().st_mtime
+        # )
 
         pdf_text = extract_pdf_text(
             str(pdf_file)
         )
 
         pdf_rows.append({
-
-            "Datum":
-                dt.strftime("%Y-%m-%d"),
-
-            "Zeit":
-                dt.strftime("%H:%M:%S"),
+            "Dateiname":
+                pdf_file.name,
 
             "Richtung":
                 get_direction(
                     str(pdf_file.parent)
                 ),
 
-            "Dateiname":
-                pdf_file.name,
+            # "EML-Dateiname":
+            #     eml_file.name,
 
             "Text_Auszug":
                 create_preview(pdf_text)
+
+
+            # "Topics":
+            #     ...
+
         })
 
     except Exception as ex:
@@ -514,13 +515,14 @@ rows.sort(
 )
 
 
-pdf_rows.sort(
-    key=lambda r: (
-        r["Datum"],
-        r["Zeit"]
-    ),
-    reverse=True
-)
+# todo Sort by name?
+# pdf_rows.sort(
+#     key=lambda r: (
+#         r["Datum"],
+#         r["Zeit"]
+#     ),
+#     reverse=True
+# )
 
 # ==========================================
 # PDF-Text extrahieren
@@ -587,12 +589,11 @@ with open(
 
 
     pdf_fieldnames = [
-
-        "Datum",
-        "Zeit",
-        "Richtung",
         "Dateiname",
+        "Richtung",
+#        "EML-Dateiname",
         "Text_Auszug"
+#        "Topics"
     ]
 
     with open(
