@@ -401,6 +401,8 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
                 attachments.append(filename)
 
                 pdf_rows.append({
+                    "_sort_dt": dt,
+
                     "Anhang_vom":
                         dt.strftime("%d.%m.%Y"),
 
@@ -420,6 +422,8 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
                 })
 
         rows.append({
+            "_sort_dt": dt,
+
             "E_Mail_vom":
                 dt.strftime("%d.%m.%Y")
                 if dt else "",
@@ -488,10 +492,13 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
 # ==========================================
 
 rows.sort(
-    key=lambda r: (
-        r["E_Mail_vom"],
-        r["Uhrzeit"]
-    ),
+    key=lambda r: r["_sort_dt"],
+    reverse=True
+)
+
+
+pdf_rows.sort(
+    key=lambda r: r["_sort_dt"],
     reverse=True
 )
 
@@ -553,7 +560,8 @@ with open(
 ) as f:
     writer = csv.DictWriter(
         f,
-        fieldnames=fieldnames
+        fieldnames=fieldnames,
+        extrasaction="ignore"
     )
 
     writer.writeheader()
@@ -577,7 +585,8 @@ with open(
 
         writer = csv.DictWriter(
             f,
-            fieldnames=pdf_fieldnames
+            fieldnames=pdf_fieldnames,
+            extrasaction="ignore"
         )
 
         writer.writeheader()
