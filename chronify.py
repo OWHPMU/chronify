@@ -388,6 +388,21 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
             extract_candidate_words(mailtext)
         )
 
+
+        # Read pdf-attachment list
+        attachments = []
+
+        for part in msg.walk():
+
+            filename = part.get_filename()
+
+            if not filename:
+                continue
+
+            if filename.lower().endswith(".pdf"):
+                attachments.append(filename)
+
+
         rows.append({
             "Datum":
                 dt.strftime("%Y-%m-%d")
@@ -416,6 +431,9 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
 
             "Pfad":
                 str(eml_file.parent),
+
+            "PDF-Anhänge":
+            "; ".join(attachments),
 
             "Absender":
                 get_email_address(
@@ -566,6 +584,7 @@ fieldnames = [
     "Betreff",
     "Text_Auszug",
     "Pfad",
+    "PDF-Anhänge",
     "Absender",
     "Empfaenger",
     "Message_ID",
