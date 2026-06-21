@@ -361,6 +361,7 @@ def detect_topics(text, topics_dict):
 topics_dict = load_topics()
 
 rows = []
+pdf_rows = []
 
 all_words = Counter()
 
@@ -388,8 +389,18 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
             extract_candidate_words(mailtext)
         )
 
-
         # Read pdf-attachment list
+        # attachments = []
+
+        # for part in msg.walk():
+
+        #     filename = part.get_filename()
+
+        #     if not filename:
+        #         continue
+
+        #     if filename.lower().endswith(".pdf"):
+        #         attachments.append(filename)
         attachments = []
 
         for part in msg.walk():
@@ -400,8 +411,22 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
                 continue
 
             if filename.lower().endswith(".pdf"):
+
                 attachments.append(filename)
 
+                pdf_rows.append({
+
+                    "Dateiname":
+                        filename,
+
+                    "Richtung":
+                        get_direction(
+                            str(eml_file.parent)
+                        ),
+
+                    "EML_Dateiname":
+                        eml_file.name
+                })
 
         rows.append({
             "Datum":
@@ -429,8 +454,8 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
             "Text_Auszug":
                 create_preview(mailtext),
 
-            "PDF-Anhänge":
-            "; ".join(attachments),
+            "PDF_Anhaenge":
+                "; ".join(attachments),
 
             "Absender":
                 get_email_address(
@@ -455,7 +480,7 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
                 ),
 
             "Dateiname":
-                eml_file.name
+                eml_file.name,
         })
 
     except Exception as ex:
@@ -471,50 +496,50 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
 # PDF EINLESEN
 # ==========================================
 
-pdf_rows = []
+# pdf_rows = []
 
-for pdf_file in Path(PDF_ROOT_DIR).rglob("*.pdf"):
+# for pdf_file in Path(PDF_ROOT_DIR).rglob("*.pdf"):
 
-    try:
+#     try:
 
-        # dt = datetime.fromtimestamp(
-        #     pdf_file.stat().st_mtime
-        # )
+#         # dt = datetime.fromtimestamp(
+#         #     pdf_file.stat().st_mtime
+#         # )
 
-        pdf_text = extract_pdf_text(
-            str(pdf_file)
-        )
+#         pdf_text = extract_pdf_text(
+#             str(pdf_file)
+#         )
 
-        pdf_rows.append({
-            "Dateiname":
-                pdf_file.name,
+#         pdf_rows.append({
+#             "Dateiname":
+#                 pdf_file.name,
 
-            "Richtung":
-                get_direction(
-                    str(pdf_file.parent)
-                ),
+#             "Richtung":
+#                 get_direction(
+#                     str(pdf_file.parent)
+#                 ),
 
-            # "EML-Dateiname":
-            #     eml_file.name,
+#             # "EML-Dateiname":
+#             #     eml_file.name,
 
-            "Text_Auszug":
-                create_preview(pdf_text)
+#             "Text_Auszug":
+#                 create_preview(pdf_text)
 
 
-            # "Topics":
-            #     ...
+#             # "Topics":
+#             #     ...
 
-        })
+#         })
 
-    except Exception as ex:
+#     except Exception as ex:
 
-        print()
-        print("=" * 80)
-        print("FEHLER BEIM PDF EINLESEN")
-        print(pdf_file)
-        print(ex)
-        print("=" * 80)
-        print()
+#         print()
+#         print("=" * 80)
+#         print("FEHLER BEIM PDF EINLESEN")
+#         print(pdf_file)
+#         print(ex)
+#         print("=" * 80)
+#         print()
 
 
 # ==========================================
@@ -544,25 +569,25 @@ rows.sort(
 # ==========================================
 
 
-def extract_pdf_text(pdf_file):
+# def extract_pdf_text(pdf_file):
 
-    try:
+#     try:
 
-        reader = PdfReader(pdf_file)
+#         reader = PdfReader(pdf_file)
 
-        parts = []
+#         parts = []
 
-        for page in reader.pages:
+#         for page in reader.pages:
 
-            text = page.extract_text()
+#             text = page.extract_text()
 
-            if text:
-                parts.append(text)
+#             if text:
+#                 parts.append(text)
 
-        return "\n".join(parts)
+#         return "\n".join(parts)
 
-    except Exception:
-        return ""
+#     except Exception:
+#         return ""
 
 # ==========================================
 # EML-CSV SCHREIBEN
@@ -580,7 +605,7 @@ fieldnames = [
     "Topics",
     "Betreff",
     "Text_Auszug",
-    "PDF-Anhänge",
+    "PDF_Anhaenge",
     "Absender",
     "Empfaenger",
     "Message_ID",
@@ -603,16 +628,38 @@ with open(
     writer.writerows(rows)
 
 
+#     pdf_fieldnames = [
+#         "Dateiname",
+#         "Richtung",
+# #        "EML-Dateiname",
+#         "Text_Auszug"
+# #        "Topics"
+#     ]
+
+#     with open(
+#         PDF_OUTPUT_CSV,
+#         "w",
+#         newline="",
+#         encoding="utf-8-sig"
+#     ) as f:
+
+#         writer = csv.DictWriter(
+#             f,
+#             fieldnames=pdf_fieldnames
+#         )
+
+#         writer.writeheader()
+#         writer.writerows(pdf_rows)
+
     pdf_fieldnames = [
+
         "Dateiname",
         "Richtung",
-#        "EML-Dateiname",
-        "Text_Auszug"
-#        "Topics"
+        "EML_Dateiname"
     ]
 
     with open(
-        PDF_OUTPUT_CSV,
+        "./00_Timeline/chronify_pdf_attachments.csv",
         "w",
         newline="",
         encoding="utf-8-sig"
