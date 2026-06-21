@@ -429,9 +429,6 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
             "Text_Auszug":
                 create_preview(mailtext),
 
-            "Pfad":
-                str(eml_file.parent),
-
             "PDF-Anhänge":
             "; ".join(attachments),
 
@@ -583,7 +580,6 @@ fieldnames = [
     "Topics",
     "Betreff",
     "Text_Auszug",
-    "Pfad",
     "PDF-Anhänge",
     "Absender",
     "Empfaenger",
