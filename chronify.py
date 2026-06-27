@@ -21,7 +21,7 @@ from pypdf import PdfReader
 # KONFIGURATION
 # ==========================================
 
-SCRIPT_VERSION = "v6"
+SCRIPT_VERSION = "v6.1"
 
 ROOT_DIR = "./01_E-Mails_EML"
 PDF_ROOT_DIR = "./02_Anhaenge_PDF"
