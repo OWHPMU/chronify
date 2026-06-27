@@ -1,5 +1,17 @@
 # Chronify
 
+## v6.0 - 2026-06-21
+New features
+- Import PDF attachments
+- Generate chronify_pdf_attachments.csv
+- Build EML ↔ PDF attachment mapping
+- Add PDF_Anhaenge column to timeline CSV
+- Add EML_Dateiname column to PDF attachment CSV
+Changes
+- Read PDF attachment information directly from EML files
+- Display date and time in German format (DD.MM.YYYY, HH:MM)
+- Use the associated email date and time for PDF attachments
+
 ## v5 - 2026-06-20
 - Split blacklist to separate file
 - Update existing topic candidates if new topics with new EMLs have been added
