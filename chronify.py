@@ -334,7 +334,8 @@ def detect_topics(text, topics_dict):
 # EML EINLESEN
 # ==========================================
 
-topics_dict = load_topics()
+#topics_dict = load_topics()
+topics_dict = {} # Schritt 1
 
 rows = []
 pdf_rows = []
@@ -414,11 +415,12 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
                     str(eml_file.parent)
                 ),
 
-            "Topics":
-                detect_topics(
-                    mailtext,
-                    topics_dict
-                ),
+            # "Topics":
+            #     detect_topics(
+            #         mailtext,
+            #         topics_dict
+            #     ),
+            "Topics": "", # Schritt 2
 
             "Betreff":
                 betreff,
@@ -464,6 +466,7 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
         print("=" * 80)
         print()
 
+
 # ==========================================
 # EML-CSV SORTIEREN
 # ==========================================
@@ -479,71 +482,80 @@ pdf_rows.sort(
     reverse=True
 )
 
+# Topics are available only after topics.json has been updated.
+# The CSV is therefore written later.
 
-# ==========================================
-# EML-CSV UND PDF-ATTACHMENTS-CSV SCHREIBEN
-# ==========================================
 
-os.makedirs(
-    os.path.dirname(OUTPUT_CSV),
-    exist_ok=True
-)
+# # ==========================================
+# # EML-CSV UND PDF-ATTACHMENTS-CSV SCHREIBEN
+# # ==========================================
 
-# Write EML to CSV
-fieldnames = [
-    "E_Mail_vom",
-    "Uhrzeit",
-    "Richtung",
-    "Topics",
-    "Betreff",
-    "Text_Auszug",
-    "PDF_Anhaenge",
-    "Absender",
-    "Empfaenger",
-    "Message_ID",
-    "In_Reply_To",
-    "Dateiname"
-]
+# os.makedirs(
+#     os.path.dirname(OUTPUT_CSV),
+#     exist_ok=True
+# )
 
-with open(
-    OUTPUT_CSV,
-    "w",
-    newline="",
-    encoding="utf-8-sig"
-) as f:
-    writer = csv.DictWriter(
-        f,
-        fieldnames=fieldnames,
-        extrasaction="ignore"
-    )
+# # Write EML to CSV
+# fieldnames = [
+#     "E_Mail_vom",
+#     "Uhrzeit",
+#     "Richtung",
+#     "Topics",
+#     "Betreff",
+#     "Text_Auszug",
+#     "PDF_Anhaenge",
+#     "Absender",
+#     "Empfaenger",
+#     "Message_ID",
+#     "In_Reply_To",
+#     "Dateiname"
+# ]
 
-    writer.writeheader()
-    writer.writerows(rows)
+# # # Detect topics after topics.json has been updated
+# # for row in rows: # Schritt 4
+# #     row["Topics"] = "; ".join(
+# #         detect_topics(row["Text_Auszug"], topics_dict)
+# #     )
 
-    # Write PDF attachmenets list to PDF-attachments-CSV
-    pdf_fieldnames = [
-        "Anhang_vom",
-        "Uhrzeit",
-        "Richtung",
-        "Dateiname",
-        "EML_Dateiname"
-    ]
+# with open(
+#     OUTPUT_CSV,
+#     "w",
+#     newline="",
+#     encoding="utf-8-sig"
+# ) as f:
+#     writer = csv.DictWriter(
+#         f,
+#         fieldnames=fieldnames,
+#         extrasaction="ignore"
+#     )
 
-    with open(
-        "./00_Timeline/chronify_pdf_attachments.csv",
-        "w",
-        newline="",
-        encoding="utf-8-sig"
-    ) as f:
+#     writer.writeheader()
+#     writer.writerows(rows)
 
-        writer = csv.DictWriter(
-            f,
-            fieldnames=pdf_fieldnames,
-            extrasaction="ignore"
-        )
+#     # Write PDF attachmenets list to PDF-attachments-CSV
+#     pdf_fieldnames = [
+#         "Anhang_vom",
+#         "Uhrzeit",
+#         "Richtung",
+#         "Dateiname",
+#         "EML_Dateiname"
+#     ]
 
-        writer.writeheader()
-        writer.writerows(pdf_rows)
+#     with open(
+#         "./00_Timeline/chronify_pdf_attachments.csv",
+#         "w",
+#         newline="",
+#         encoding="utf-8-sig"
+#     ) as f:
+
+#         writer = csv.DictWriter(
+#             f,
+#             fieldnames=pdf_fieldnames,
+#             extrasaction="ignore"
+#         )
+
+#         writer.writeheader()
+#         writer.writerows(pdf_rows)
 
 
 # ==========================================
@@ -625,6 +637,90 @@ with open(
         indent=4,
         ensure_ascii=False
     )
+
+topics_dict = load_topics() # Schritt 4
+
+for row in rows:
+    row["Topics"] = detect_topics(
+        row["Text_Auszug"],
+        topics_dict
+    )
+
+# HIER
+# ==========================================
+# EML-CSV UND PDF-ATTACHMENTS-CSV SCHREIBEN
+# ==========================================
+
+os.makedirs(
+    os.path.dirname(OUTPUT_CSV),
+    exist_ok=True
+)
+
+# Write EML to CSV
+fieldnames = [
+    "E_Mail_vom",
+    "Uhrzeit",
+    "Richtung",
+    "Topics",
+    "Betreff",
+    "Text_Auszug",
+    "PDF_Anhaenge",
+    "Absender",
+    "Empfaenger",
+    "Message_ID",
+    "In_Reply_To",
+    "Dateiname"
+]
+
+# # Detect topics after topics.json has been updated
+# for row in rows: # Schritt 4
+#     row["Topics"] = "; ".join(
+#         detect_topics(row["Text_Auszug"], topics_dict)
+#     )
+
+with open(
+    OUTPUT_CSV,
+    "w",
+    newline="",
+    encoding="utf-8-sig"
+) as f:
+    writer = csv.DictWriter(
+        f,
+        fieldnames=fieldnames,
+        extrasaction="ignore"
+    )
+
+    writer.writeheader()
+    writer.writerows(rows)
+
+    # Write PDF attachmenets list to PDF-attachments-CSV
+    pdf_fieldnames = [
+        "Anhang_vom",
+        "Uhrzeit",
+        "Richtung",
+        "Dateiname",
+        "EML_Dateiname"
+    ]
+
+    with open(
+        "./00_Timeline/chronify_pdf_attachments.csv",
+        "w",
+        newline="",
+        encoding="utf-8-sig"
+    ) as f:
+
+        writer = csv.DictWriter(
+            f,
+            fieldnames=pdf_fieldnames,
+            extrasaction="ignore"
+        )
+
+        writer.writeheader()
+        writer.writerows(pdf_rows)
+
+    # # Reload topics after updating topics.json
+    # topics_dict = load_topics() # Schritt 3 alt
+
 
 # ==========================================
 # AUSGABE
