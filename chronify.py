@@ -265,27 +265,6 @@ def create_preview(text):
     return text[:TEXT_PREVIEW_LENGTH] + "..."
 
 
-def extract_pdf_text(pdf_file):
-
-    try:
-
-        reader = PdfReader(pdf_file)
-
-        parts = []
-
-        for page in reader.pages:
-
-            text = page.extract_text()
-
-            if text:
-                parts.append(text)
-
-        return "\n".join(parts)
-
-    except Exception:
-        return ""
-
-
 # ==========================================
 # TOPIC-KANDIDATEN
 # ==========================================
@@ -500,30 +479,6 @@ pdf_rows.sort(
     reverse=True
 )
 
-# ==========================================
-# PDF-Text extrahieren
-# ==========================================
-
-
-# def extract_pdf_text(pdf_file):
-
-#     try:
-
-#         reader = PdfReader(pdf_file)
-
-#         parts = []
-
-#         for page in reader.pages:
-
-#             text = page.extract_text()
-
-#             if text:
-#                 parts.append(text)
-
-#         return "\n".join(parts)
-
-#     except Exception:
-#         return ""
 
 # ==========================================
 # EML-CSV UND PDF-ATTACHMENTS-CSV SCHREIBEN
