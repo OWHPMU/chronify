@@ -46,8 +46,6 @@ TOPICS_FILE = (
 TEXT_PREVIEW_LENGTH = 250
 
 MIN_WORD_LENGTH = 5
-MIN_OCCURRENCES = 2
-MAX_CANDIDATES = 100
 
 
 # ==========================================
@@ -612,13 +610,7 @@ if os.path.exists(TOPIC_CANDIDATES_FILE):
 topic_candidates = {}
 
 for word, count in all_words.most_common():
-    if count < MIN_OCCURRENCES:
-        continue
-
     topic_candidates[word] = count
-
-    if len(topic_candidates) >= MAX_CANDIDATES:
-        break
 
 
 merged_candidates = dict(existing_candidates)
