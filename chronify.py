@@ -10,7 +10,7 @@ from email import policy
 from email.parser import BytesParser
 from email.utils import parsedate_to_datetime, parseaddr
 
-from pypdf import PdfReader
+#from pypdf import PdfReader
 
 # =========================================================================================
 # Chronify - Turn emails, documents and attachments into a structured, searchable timeline.
@@ -44,7 +44,6 @@ TOPICS_FILE = (
 )
 
 TEXT_PREVIEW_LENGTH = 250
-
 MIN_WORD_LENGTH = 5
 
 
@@ -55,33 +54,31 @@ MIN_WORD_LENGTH = 5
 BLACKLIST_FILE = "blacklist.txt"
 
 
+# Loads blacklist from file
 def load_blacklist(filepath):
-    # Lädt die Blacklist aus einer Textdatei und entfernt leere Zeilen.
     if not os.path.exists(filepath):
-        # Falls die Datei fehlt, wird eine leere Blacklist genutzt; todo: fallback to default blacklist?
-        return set()
+        return set() # Create empty blacklist; todo 5: fallback to default blacklist?
 
     with open(filepath, "r", encoding="utf-8") as f:
-        # Liest Zeilen, entfernt Whitespace (\n) und ignoriert leere Zeilen
-        return {line.strip() for line in f if line.strip()}
+        return {line.strip() for line in f if line.strip()} # Remove whitespace (\n) and ignore empty lines
 
 
-# Blacklist beim App-Start aus der Datei einlesen
+# Load the blacklist from the file when the app starts
 BLACKLIST = load_blacklist(BLACKLIST_FILE)
 
-
+# # Convert a wildcard pattern into a regular expression
 def wildcard_to_regex(pattern):
     escaped = re.escape(pattern)
     escaped = escaped.replace(r"\*", ".*")
     return f"^{escaped}$"
 
 
-# Regex-Kompatibilität direkt aus der eingelesenen Menge erstellen
+# Create a regex compatible with the imported set
 BLACKLIST_REGEX = [
     re.compile(wildcard_to_regex(pattern), re.IGNORECASE) for pattern in BLACKLIST
 ]
 
-
+# Return whether a word is blacklisted
 def is_blacklisted(word):
     for regex in BLACKLIST_REGEX:
         if regex.match(word):
@@ -90,14 +87,16 @@ def is_blacklisted(word):
 
 
 # ==========================================
-# HILFSFUNKTIONEN
+# HELPER FUNCTIONS
 # ==========================================
 
+# Return a sanitized email header value; question: what exact kind of message is msg? The eml-message? The eml name?
 def safe_header(msg, name):
     value = msg.get(name, "")
     return str(value).replace("\n", " ").replace("\r", " ").strip()
 
 
+# Parse the email date into a local datetime object; question: what kind og message is msg?
 def parse_date(msg):
     try:
         date_str = msg.get("Date")
@@ -116,10 +115,12 @@ def parse_date(msg):
         return None
 
 
+# Extract the email address from a mail header
 def get_email_address(header_value):
     return parseaddr(header_value)[1]
 
 
+# Returns whether the message was send or received
 def get_direction(path_str):
     path_lower = path_str.lower()
 
@@ -136,6 +137,7 @@ def get_direction(path_str):
 # MAILTEXT
 # ==========================================
 
+# Extract the plain text body from an email message
 def extract_text(msg):
     try:
         if msg.is_multipart():
@@ -165,12 +167,13 @@ def extract_text(msg):
         return ""
 
 
+# Remove signatures, reply threads and boilerplate from the email text; todo 6: at least 2 messages contain text after the signature :(
 def clean_mail_text(text):
     if not text:
         return ""
 
     # ----------------------------------
-    # URLs entfernen
+    # Remove URLs
     # ----------------------------------
 
     text = re.sub(
@@ -188,7 +191,7 @@ def clean_mail_text(text):
     )
 
     # ----------------------------------
-    # Antwortketten abschneiden
+    # Trim reply threads
     # ----------------------------------
 
     reply_markers = [
@@ -215,7 +218,7 @@ def clean_mail_text(text):
     text = "\n".join(cleaned_lines)
 
     # ----------------------------------
-    # DATEV / SEPPmail abschneiden
+    # Trim DATEV / SEPPmail
     # ----------------------------------
 
     disclaimer_markers = [
@@ -235,7 +238,7 @@ def clean_mail_text(text):
             text = text[:pos]
 
     # ----------------------------------
-    # Signaturen abschneiden
+    # Trim the signatures
     # ----------------------------------
 
     signature_markers = [
@@ -256,6 +259,7 @@ def clean_mail_text(text):
     return text.strip()
 
 
+# Create a preview of the EML email text
 def create_preview(text):
     text = " ".join(text.split())
 
@@ -266,9 +270,10 @@ def create_preview(text):
 
 
 # ==========================================
-# TOPIC-KANDIDATEN
+# TOPIC CANDIDATES
 # ==========================================
 
+# Extract potential topic candidates from the email text
 def extract_candidate_words(text):
     words = re.findall(
         r"[A-Za-zÄÖÜäöüß]{5,}",
@@ -296,6 +301,7 @@ def extract_candidate_words(text):
 # TOPIC MATCHING
 # ==========================================
 
+# Reads current the topics, removes all newly blacklisted ones and returns cleaned topics
 def load_topics():
     if not os.path.exists(TOPICS_FILE):
         return {}
@@ -316,6 +322,7 @@ def load_topics():
     return cleaned_topics
 
 
+# Detect configured topics in the email text
 def detect_topics(text, topics_dict):
     found = []
 
@@ -334,13 +341,12 @@ def detect_topics(text, topics_dict):
 # EML EINLESEN
 # ==========================================
 
-#topics_dict = load_topics()
-topics_dict = {} # Schritt 1
+topics_dict = {}
 
-rows = []
+rows = [] # todo 1 Rename into a more specific name?! eml_rows?!
 pdf_rows = []
 
-all_words = Counter()
+all_words = Counter() # todo 7 Rename into all_words_count?!
 
 for eml_file in Path(ROOT_DIR).rglob("*.eml"):
     try:
@@ -351,7 +357,7 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
 
         dt = parse_date(msg)
 
-        betreff = safe_header(
+        betreff = safe_header( # todo 2 Rename into mail_subject or eml_subject or mailsubject (see mailtext)?!
             msg,
             "Subject"
         )
@@ -361,13 +367,13 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
             mailtext_raw
         )
 
-        # Wörter sammeln
+        # Collect Words
         all_words.update(
             extract_candidate_words(mailtext)
         )
 
         # Collect pdf attachments
-        attachments = []
+        attachments = [] # todo 3 Rename into pdf_attachments?!
 
         for part in msg.walk():
             filename = part.get_filename()
@@ -464,7 +470,7 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
 
 
 # ==========================================
-# EML-CSV SORTIEREN
+# SORT EML-CSV
 # ==========================================
 
 rows.sort(
@@ -478,6 +484,7 @@ pdf_rows.sort(
     reverse=True
 )
 
+# todo 4 Remove, do we need this comment?!
 # Topics are available only after topics.json has been updated.
 # The CSV is therefore written later.
 
@@ -505,15 +512,12 @@ for word, count in all_words.most_common():
 
 
 merged_candidates = dict(existing_candidates)
-
 merged_candidates.update(topic_candidates)
 
 
 merged_candidates = {
     word: count
-
     for word, count in merged_candidates.items()
-
     if not is_blacklisted(word)
 }
 
@@ -523,15 +527,9 @@ with open(
     "w",
     encoding="utf-8"
 ) as f:
-    # Sort topic candidated alphabetically right before saving
-    sorted_candidates = dict(sorted(merged_candidates.items()))
+    sorted_candidates = dict(sorted(merged_candidates.items())) # Sort topic candidated alphabetically right before saving
 
-    json.dump(
-        sorted_candidates,
-        f,
-        indent=4,
-        ensure_ascii=False
-    )
+    json.dump(sorted_candidates, f, indent=4, ensure_ascii=False)
 
 # ==========================================
 # topics.json
@@ -547,22 +545,11 @@ for word in merged_candidates.keys():
     if word not in topics:
         topics[word] = [word]
 
-with open(
-    TOPICS_FILE,
-    "w",
-    encoding="utf-8"
-) as f:
-    # Sort topics alphabetically right before saving
-    sorted_topics = dict(sorted(topics.items()))
+with open(TOPICS_FILE, "w", encoding="utf-8") as f:
+    sorted_topics = dict(sorted(topics.items())) # Sort topics alphabetically right before saving
+    json.dump(sorted_topics, f, indent=4, ensure_ascii=False )
 
-    json.dump(
-        sorted_topics,
-        f,
-        indent=4,
-        ensure_ascii=False
-    )
-
-topics_dict = load_topics() # Schritt 4
+topics_dict = load_topics()
 
 for row in rows:
     row["Topics"] = detect_topics(
@@ -571,7 +558,7 @@ for row in rows:
     )
 
 # ==========================================
-# EML-CSV UND PDF-ATTACHMENTS-CSV SCHREIBEN
+# WRITE EML-CSV UND PDF-ATTACHMENTS-CSV
 # ==========================================
 
 os.makedirs(
@@ -595,12 +582,7 @@ fieldnames = [
     "Dateiname"
 ]
 
-with open(
-    OUTPUT_CSV,
-    "w",
-    newline="",
-    encoding="utf-8-sig"
-) as f:
+with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
     writer = csv.DictWriter(
         f,
         fieldnames=fieldnames,
@@ -619,13 +601,7 @@ with open(
         "EML_Dateiname"
     ]
 
-    with open(
-        "./00_Timeline/chronify_pdf_attachments.csv",
-        "w",
-        newline="",
-        encoding="utf-8-sig"
-    ) as f:
-
+    with open("./00_Timeline/chronify_pdf_attachments.csv", "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(
             f,
             fieldnames=pdf_fieldnames,
