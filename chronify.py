@@ -401,6 +401,7 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
 
         rows.append({
             "_sort_dt": dt,
+            "_mailtext": mailtext,
 
             "E_Mail_vom":
                 dt.strftime("%d.%m.%Y")
@@ -565,7 +566,7 @@ topics_dict = load_topics() # Schritt 4
 
 for row in rows:
     row["Topics"] = detect_topics(
-        row["Text_Auszug"],
+        row["_mailtext"],
         topics_dict
     )
 
