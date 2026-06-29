@@ -57,7 +57,7 @@ BLACKLIST_FILE = "blacklist.txt"
 # Loads blacklist from file
 def load_blacklist(filepath):
     if not os.path.exists(filepath):
-        return set() # Create empty blacklist; todo 5: fallback to default blacklist?
+        return set() # Create empty blacklist; TODO Create default blacklist if the file is missing
 
     with open(filepath, "r", encoding="utf-8") as f:
         return {line.strip() for line in f if line.strip()} # Remove whitespace (\n) and ignore empty lines
@@ -167,7 +167,7 @@ def extract_text(msg):
         return ""
 
 
-# Remove signatures, reply threads and boilerplate from the email text; todo 6: at least 2 messages contain text after the signature :(
+# Remove signatures, reply threads and boilerplate from the email text; FIXME at least 2 messages contain text after the signature :(
 def clean_mail_text(text):
     if not text:
         return ""
@@ -343,10 +343,10 @@ def detect_topics(text, topics_dict):
 
 topics_dict = {}
 
-rows = [] # todo 1 Rename into a more specific name?! eml_rows?!
+eml_rows = []
 pdf_rows = []
 
-all_words = Counter() # todo 7 Rename into all_words_count?!
+candidate_word_counts = Counter()
 
 for eml_file in Path(ROOT_DIR).rglob("*.eml"):
     try:
@@ -357,7 +357,7 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
 
         dt = parse_date(msg)
 
-        betreff = safe_header( # todo 2 Rename into mail_subject or eml_subject or mailsubject (see mailtext)?!
+        mail_subject = safe_header(
             msg,
             "Subject"
         )
@@ -368,12 +368,12 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
         )
 
         # Collect Words
-        all_words.update(
+        candidate_word_counts.update(
             extract_candidate_words(mailtext)
         )
 
         # Collect pdf attachments
-        attachments = [] # todo 3 Rename into pdf_attachments?!
+        pdf_attachments = []
 
         for part in msg.walk():
             filename = part.get_filename()
@@ -382,7 +382,7 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
                 continue
 
             if filename.lower().endswith(".pdf"):
-                attachments.append(filename)
+                pdf_attachments.append(filename)
 
                 pdf_rows.append({
                     "_sort_dt": dt,
@@ -405,7 +405,7 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
                         eml_file.name
                 })
 
-        rows.append({
+        eml_rows.append({
             "_sort_dt": dt,
             "_mailtext": mailtext,
 
@@ -425,13 +425,13 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
             "Topics": "",
 
             "Betreff":
-                betreff,
+                mail_subject,
 
             "Text_Auszug":
                 create_preview(mailtext),
 
             "PDF_Anhaenge":
-                "; ".join(attachments),
+                "; ".join(pdf_attachments),
 
             "Absender":
                 get_email_address(
@@ -473,7 +473,7 @@ for eml_file in Path(ROOT_DIR).rglob("*.eml"):
 # SORT EML-CSV
 # ==========================================
 
-rows.sort(
+eml_rows.sort(
     key=lambda r: r["_sort_dt"],
     reverse=True
 )
@@ -483,10 +483,6 @@ pdf_rows.sort(
     key=lambda r: r["_sort_dt"],
     reverse=True
 )
-
-# todo 4 Remove, do we need this comment?!
-# Topics are available only after topics.json has been updated.
-# The CSV is therefore written later.
 
 
 # ==========================================
@@ -507,7 +503,7 @@ if os.path.exists(TOPIC_CANDIDATES_FILE):
 
 topic_candidates = {}
 
-for word, count in all_words.most_common():
+for word, count in candidate_word_counts.most_common():
     topic_candidates[word] = count
 
 
@@ -551,7 +547,7 @@ with open(TOPICS_FILE, "w", encoding="utf-8") as f:
 
 topics_dict = load_topics()
 
-for row in rows:
+for row in eml_rows:
     row["Topics"] = detect_topics(
         row["_mailtext"],
         topics_dict
@@ -590,7 +586,7 @@ with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
     )
 
     writer.writeheader()
-    writer.writerows(rows)
+    writer.writerows(eml_rows)
 
     # Write PDF attachmenets list to PDF-attachments-CSV
     pdf_fieldnames = [
@@ -623,7 +619,7 @@ print("Verwandelt E-Mails, Dokumente und Anhänge in eine strukturierte, durchsu
 print("=" * 80)
 
 print()
-print(f"EMLs gefunden: {len(rows)}")
+print(f"EMLs gefunden: {len(eml_rows)}")
 print(f"PDFs gefunden: {len(pdf_rows)}")
 
 print()
