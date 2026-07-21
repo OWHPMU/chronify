@@ -21,7 +21,7 @@ from email.utils import parsedate_to_datetime, parseaddr
 # KONFIGURATION
 # ==========================================
 
-SCRIPT_VERSION = "v6.1"
+SCRIPT_VERSION = "v6.2"
 
 ROOT_DIR = "./01_E-Mails_EML"
 PDF_ROOT_DIR = "./02_Anhaenge_PDF"
@@ -337,308 +337,326 @@ def detect_topics(text, topics_dict):
     return "; ".join(sorted(found))
 
 
-# ==========================================
-# EML EINLESEN
-# ==========================================
 
-topics_dict = {}
-
-eml_rows = []
-pdf_rows = []
-
-candidate_word_counts = Counter()
-
-for eml_file in Path(ROOT_DIR).rglob("*.eml"):
-    try:
-        with open(eml_file, "rb") as f:
-            msg = BytesParser(
-                policy=policy.default
-            ).parse(f)
-
-        dt = parse_date(msg)
-
-        mail_subject = safe_header(
-            msg,
-            "Subject"
-        )
-
-        mailtext_raw = extract_text(msg)
-        mailtext = clean_mail_text(
-            mailtext_raw
-        )
-
-        # Collect Words
-        candidate_word_counts.update(
-            extract_candidate_words(mailtext)
-        )
-
-        # Collect pdf attachments
-        pdf_attachments = []
-
-        for part in msg.walk():
-            filename = part.get_filename()
-
-            if not filename:
-                continue
-
-            if filename.lower().endswith(".pdf"):
-                pdf_attachments.append(filename)
-
-                pdf_rows.append({
-                    "_sort_dt": dt,
-
-                    "Anhang_vom":
-                        dt.strftime("%d.%m.%Y"),
-
-                    "Uhrzeit":
-                        dt.strftime("%H:%M"),
-
-                    "Richtung":
-                        get_direction(
-                            str(eml_file.parent)
-                        ),
-
-                    "Dateiname":
-                        filename,
-
-                    "EML_Dateiname":
-                        eml_file.name
-                })
-
-        eml_rows.append({
-            "_sort_dt": dt,
-            "_mailtext": mailtext,
-
-            "E_Mail_vom":
-                dt.strftime("%d.%m.%Y")
-                if dt else "",
-
-            "Uhrzeit":
-                dt.strftime("%H:%M")
-                if dt else "",
-
-            "Richtung":
-                get_direction(
-                    str(eml_file.parent)
-                ),
-
-            "Topics": "",
-
-            "Betreff":
-                mail_subject,
-
-            "Text_Auszug":
-                create_preview(mailtext),
-
-            "PDF_Anhaenge":
-                "; ".join(pdf_attachments),
-
-            "Absender":
-                get_email_address(
-                    msg.get("From", "")
-                ),
-
-            "Empfaenger":
-                get_email_address(
-                    msg.get("To", "")
-                ),
-
-            "Message_ID":
-                safe_header(
-                    msg,
-                    "Message-ID"
-                ),
-
-            "In_Reply_To":
-                safe_header(
-                    msg,
-                    "In-Reply-To"
-                ),
-
-            "Dateiname":
-                eml_file.name,
-        })
-
-    except Exception as ex:
-        print()
-        print("=" * 80)
-        print("FEHLER BEIM EINLESEN")
-        print(eml_file)
-        print(ex)
-        print("=" * 80)
-        print()
 
 
 # ==========================================
-# SORT EML-CSV
+# Main application
 # ==========================================
 
-eml_rows.sort(
-    key=lambda r: r["_sort_dt"],
-    reverse=True
-)
+def main():
+    topics_dict = {}
+
+    eml_rows = []
+    pdf_rows = []
+
+    candidate_word_counts = Counter()
 
 
-pdf_rows.sort(
-    key=lambda r: r["_sort_dt"],
-    reverse=True
-)
+    # ==========================================
+    # EML EINLESEN
+    # ==========================================
+
+    for eml_file in Path(ROOT_DIR).rglob("*.eml"):
+        try:
+            with open(eml_file, "rb") as f:
+                msg = BytesParser(
+                    policy=policy.default
+                ).parse(f)
+
+            dt = parse_date(msg)
+
+            mail_subject = safe_header(
+                msg,
+                "Subject"
+            )
+
+            mailtext_raw = extract_text(msg)
+            mailtext = clean_mail_text(
+                mailtext_raw
+            )
+
+            # Collect Words
+            candidate_word_counts.update(
+                extract_candidate_words(mailtext)
+            )
+
+            # Collect pdf attachments
+            pdf_attachments = []
+
+            for part in msg.walk():
+                filename = part.get_filename()
+
+                if not filename:
+                    continue
+
+                if filename.lower().endswith(".pdf"):
+                    pdf_attachments.append(filename)
+
+                    pdf_rows.append({
+                        "_sort_dt": dt,
+
+                        "Anhang_vom":
+                            dt.strftime("%d.%m.%Y"),
+
+                        "Uhrzeit":
+                            dt.strftime("%H:%M"),
+
+                        "Richtung":
+                            get_direction(
+                                str(eml_file.parent)
+                            ),
+
+                        "Dateiname":
+                            filename,
+
+                        "EML_Dateiname":
+                            eml_file.name
+                    })
+
+            eml_rows.append({
+                "_sort_dt": dt,
+                "_mailtext": mailtext,
+
+                "E_Mail_vom":
+                    dt.strftime("%d.%m.%Y")
+                    if dt else "",
+
+                "Uhrzeit":
+                    dt.strftime("%H:%M")
+                    if dt else "",
+
+                "Richtung":
+                    get_direction(
+                        str(eml_file.parent)
+                    ),
+
+                "Topics": "",
+
+                "Betreff":
+                    mail_subject,
+
+                "Text_Auszug":
+                    create_preview(mailtext),
+
+                "PDF_Anhaenge":
+                    "; ".join(pdf_attachments),
+
+                "Absender":
+                    get_email_address(
+                        msg.get("From", "")
+                    ),
+
+                "Empfaenger":
+                    get_email_address(
+                        msg.get("To", "")
+                    ),
+
+                "Message_ID":
+                    safe_header(
+                        msg,
+                        "Message-ID"
+                    ),
+
+                "In_Reply_To":
+                    safe_header(
+                        msg,
+                        "In-Reply-To"
+                    ),
+
+                "Dateiname":
+                    eml_file.name,
+            })
+
+        except Exception as ex:
+            print()
+            print("=" * 80)
+            print("FEHLER BEIM EINLESEN")
+            print(eml_file)
+            print(ex)
+            print("=" * 80)
+            print()
 
 
-# ==========================================
-# topic_candidates.json
-# ==========================================
+    # ==========================================
+    # SORT EML-CSV
+    # ==========================================
 
-existing_candidates = {}
+    eml_rows.sort(
+        key=lambda r: r["_sort_dt"],
+        reverse=True
+    )
 
 
-if os.path.exists(TOPIC_CANDIDATES_FILE):
+    pdf_rows.sort(
+        key=lambda r: r["_sort_dt"],
+        reverse=True
+    )
+
+
+    # ==========================================
+    # topic_candidates.json
+    # ==========================================
+
+    existing_candidates = {}
+
+
+    if os.path.exists(TOPIC_CANDIDATES_FILE):
+        with open(
+            TOPIC_CANDIDATES_FILE,
+            "r",
+            encoding="utf-8"
+        ) as f:
+            existing_candidates = json.load(f)
+
+
+    topic_candidates = {}
+
+    for word, count in candidate_word_counts.most_common():
+        topic_candidates[word] = count
+
+
+    merged_candidates = dict(existing_candidates)
+    merged_candidates.update(topic_candidates)
+
+
+    merged_candidates = {
+        word: count
+        for word, count in merged_candidates.items()
+        if not is_blacklisted(word)
+    }
+
+    # Update topic_candidates.json
     with open(
         TOPIC_CANDIDATES_FILE,
-        "r",
+        "w",
         encoding="utf-8"
     ) as f:
-        existing_candidates = json.load(f)
+        sorted_candidates = dict(sorted(merged_candidates.items())) # Sort topic candidated alphabetically right before saving
 
+        json.dump(sorted_candidates, f, indent=4, ensure_ascii=False)
 
-topic_candidates = {}
+    # ==========================================
+    # topics.json
+    # ==========================================
 
-for word, count in candidate_word_counts.most_common():
-    topic_candidates[word] = count
+    topics = {}
 
+    if os.path.exists(TOPICS_FILE):
+        with open(TOPICS_FILE, "r", encoding="utf-8") as f:
+            topics = json.load(f)
 
-merged_candidates = dict(existing_candidates)
-merged_candidates.update(topic_candidates)
+    for word in merged_candidates.keys():
+        if word not in topics:
+            topics[word] = [word]
 
+    with open(TOPICS_FILE, "w", encoding="utf-8") as f:
+        sorted_topics = dict(sorted(topics.items())) # Sort topics alphabetically right before saving
+        json.dump(sorted_topics, f, indent=4, ensure_ascii=False )
 
-merged_candidates = {
-    word: count
-    for word, count in merged_candidates.items()
-    if not is_blacklisted(word)
-}
+    topics_dict = load_topics()
 
-# Update topic_candidates.json
-with open(
-    TOPIC_CANDIDATES_FILE,
-    "w",
-    encoding="utf-8"
-) as f:
-    sorted_candidates = dict(sorted(merged_candidates.items())) # Sort topic candidated alphabetically right before saving
+    for row in eml_rows:
+        row["Topics"] = detect_topics(
+            row["_mailtext"],
+            topics_dict
+        )
 
-    json.dump(sorted_candidates, f, indent=4, ensure_ascii=False)
+    # ==========================================
+    # WRITE EML-CSV UND PDF-ATTACHMENTS-CSV
+    # ==========================================
 
-# ==========================================
-# topics.json
-# ==========================================
-
-topics = {}
-
-if os.path.exists(TOPICS_FILE):
-    with open(TOPICS_FILE, "r", encoding="utf-8") as f:
-        topics = json.load(f)
-
-for word in merged_candidates.keys():
-    if word not in topics:
-        topics[word] = [word]
-
-with open(TOPICS_FILE, "w", encoding="utf-8") as f:
-    sorted_topics = dict(sorted(topics.items())) # Sort topics alphabetically right before saving
-    json.dump(sorted_topics, f, indent=4, ensure_ascii=False )
-
-topics_dict = load_topics()
-
-for row in eml_rows:
-    row["Topics"] = detect_topics(
-        row["_mailtext"],
-        topics_dict
+    os.makedirs(
+        os.path.dirname(OUTPUT_CSV),
+        exist_ok=True
     )
 
-# ==========================================
-# WRITE EML-CSV UND PDF-ATTACHMENTS-CSV
-# ==========================================
-
-os.makedirs(
-    os.path.dirname(OUTPUT_CSV),
-    exist_ok=True
-)
-
-# Write EML to CSV
-fieldnames = [
-    "E_Mail_vom",
-    "Uhrzeit",
-    "Richtung",
-    "Topics",
-    "Betreff",
-    "Text_Auszug",
-    "PDF_Anhaenge",
-    "Absender",
-    "Empfaenger",
-    "Message_ID",
-    "In_Reply_To",
-    "Dateiname"
-]
-
-with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
-    writer = csv.DictWriter(
-        f,
-        fieldnames=fieldnames,
-        extrasaction="ignore"
-    )
-
-    writer.writeheader()
-    writer.writerows(eml_rows)
-
-    # Write PDF attachmenets list to PDF-attachments-CSV
-    pdf_fieldnames = [
-        "Anhang_vom",
+    # Write EML to CSV
+    fieldnames = [
+        "E_Mail_vom",
         "Uhrzeit",
         "Richtung",
-        "Dateiname",
-        "EML_Dateiname"
+        "Topics",
+        "Betreff",
+        "Text_Auszug",
+        "PDF_Anhaenge",
+        "Absender",
+        "Empfaenger",
+        "Message_ID",
+        "In_Reply_To",
+        "Dateiname"
     ]
 
-    with open("./00_Timeline/chronify_pdf_attachments.csv", "w", newline="", encoding="utf-8-sig") as f:
+    with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(
             f,
-            fieldnames=pdf_fieldnames,
+            fieldnames=fieldnames,
             extrasaction="ignore"
         )
 
         writer.writeheader()
-        writer.writerows(pdf_rows)
+        writer.writerows(eml_rows)
+
+        # Write PDF attachmenets list to PDF-attachments-CSV
+        pdf_fieldnames = [
+            "Anhang_vom",
+            "Uhrzeit",
+            "Richtung",
+            "Dateiname",
+            "EML_Dateiname"
+        ]
+
+        with open("./00_Timeline/chronify_pdf_attachments.csv", "w", newline="", encoding="utf-8-sig") as f:
+            writer = csv.DictWriter(
+                f,
+                fieldnames=pdf_fieldnames,
+                extrasaction="ignore"
+            )
+
+            writer.writeheader()
+            writer.writerows(pdf_rows)
 
 
-# ==========================================
-# AUSGABE
-# ==========================================
+    # ==========================================
+    # AUSGABE
+    # ==========================================
 
-print()
-print("=" * 80)
-print(f"Chronify {SCRIPT_VERSION}")
-print("Verwandelt E-Mails, Dokumente und Anhänge in eine strukturierte, durchsuchbare Timeline.")
-print("=" * 80)
-
-print()
-print(f"EMLs gefunden: {len(eml_rows)}")
-print(f"PDFs gefunden: {len(pdf_rows)}")
-
-print()
-print("Topic-Kandidaten:")
-print(TOPIC_CANDIDATES_FILE)
-
-if os.path.exists(TOPICS_FILE):
     print()
-    print("Topics:")
-    print(TOPICS_FILE)
+    print("=" * 80)
+    print(f"Chronify {SCRIPT_VERSION}")
+    print("Verwandelt E-Mails, Dokumente und Anhänge in eine strukturierte, durchsuchbare Timeline.")
+    print("=" * 80)
 
-print()
-print("CSV erzeugt:")
-print(OUTPUT_CSV)
+    print()
+    print(f"EMLs gefunden: {len(eml_rows)}")
+    print(f"PDFs gefunden: {len(pdf_rows)}")
 
-print()
-print("PDF CSV erzeugt:")
-print(PDF_OUTPUT_CSV)
+    print()
+    print("Topic-Kandidaten:")
+    print(TOPIC_CANDIDATES_FILE)
 
-print()
-print("=" * 80)
-print()
+    if os.path.exists(TOPICS_FILE):
+        print()
+        print("Topics:")
+        print(TOPICS_FILE)
+
+    print()
+    print("CSV erzeugt:")
+    print(OUTPUT_CSV)
+
+    print()
+    print("PDF CSV erzeugt:")
+    print(PDF_OUTPUT_CSV)
+
+    print()
+    print("=" * 80)
+    print()
+
+
+
+# ==========================================
+# CALL MAIN - python3 ./chronify.py
+# ==========================================
+
+if __name__ == "__main__":
+    main()
