@@ -1,5 +1,15 @@
 # Chronify
 
+
+### v6.1 - 2026-06-29
+
+- Improved topic detection by analyzing the complete email text instead of only the preview.
+- Fixed timeline topic generation on the initial run.
+- Removed obsolete topic detection limits (`MIN_OCCURRENCES`, `MAX_CANDIDATES`).
+- Expanded the default blacklist to reduce irrelevant topic candidates.
+- Removed obsolete PDF extraction code and performed general code cleanup.
+- Improved code readability through renaming, documentation, and formatting.
+
 ## v6.0 - 2026-06-21
 New features
 - Import PDF attachments
