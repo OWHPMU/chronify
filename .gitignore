@@ -3,6 +3,7 @@
 *.csv
 *.swp
 *.zip
+*.json
 
 .DS_Store
 **/.DS_Store
