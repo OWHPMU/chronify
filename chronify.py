@@ -609,24 +609,24 @@ def main():
         writer.writeheader()
         writer.writerows(eml_rows)
 
-        # Write PDF attachmenets list to PDF-attachments-CSV
-        pdf_fieldnames = [
-            "Anhang_vom",
-            "Uhrzeit",
-            "Richtung",
-            "Dateiname",
-            "EML_Dateiname"
-        ]
+    # Write PDF attachmenets list to PDF-attachments-CSV
+    pdf_fieldnames = [
+        "Anhang_vom",
+        "Uhrzeit",
+        "Richtung",
+        "Dateiname",
+        "EML_Dateiname"
+    ]
 
-        with open("./00_Timeline/chronify_pdf_attachments.csv", "w", newline="", encoding="utf-8-sig") as f:
-            writer = csv.DictWriter(
-                f,
-                fieldnames=pdf_fieldnames,
-                extrasaction="ignore"
-            )
+    with open("./00_Timeline/chronify_pdf_attachments.csv", "w", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=pdf_fieldnames,
+            extrasaction="ignore"
+        )
 
-            writer.writeheader()
-            writer.writerows(pdf_rows)
+        writer.writeheader()
+        writer.writerows(pdf_rows)
 
 
     # ==========================================
