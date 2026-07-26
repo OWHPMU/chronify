@@ -577,6 +577,27 @@ def write_timeline_csv(eml_rows):
         writer.writerows(eml_rows)
 
 
+def write_pdf_attachment_csv(pdf_rows):
+    # Write PDF attachmenets list to PDF-attachments-CSV
+    pdf_fieldnames = [
+        "Anhang_vom",
+        "Uhrzeit",
+        "Richtung",
+        "Dateiname",
+        "EML_Dateiname"
+    ]
+
+    with open(PDF_OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=pdf_fieldnames,
+            extrasaction="ignore"
+        )
+
+        writer.writeheader()
+        writer.writerows(pdf_rows)
+
+
 def print_summary(
     SCRIPT_VERSION,
     eml_rows,
@@ -655,24 +676,7 @@ def main():
 
     write_timeline_csv(eml_rows)
 
-    # Write PDF attachmenets list to PDF-attachments-CSV
-    pdf_fieldnames = [
-        "Anhang_vom",
-        "Uhrzeit",
-        "Richtung",
-        "Dateiname",
-        "EML_Dateiname"
-    ]
-
-    with open(PDF_OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.DictWriter(
-            f,
-            fieldnames=pdf_fieldnames,
-            extrasaction="ignore"
-        )
-
-        writer.writeheader()
-        writer.writerows(pdf_rows)
+    write_pdf_attachment_csv(pdf_rows)
 
 
     # ==========================================
