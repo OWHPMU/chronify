@@ -2,9 +2,11 @@ import os
 import csv
 import json
 import re
+import stanza
 
 from pathlib import Path
 from collections import Counter
+from datetime import date
 
 from email import policy
 from email.parser import BytesParser
@@ -21,19 +23,19 @@ from email.utils import parsedate_to_datetime, parseaddr
 # KONFIGURATION
 # ==========================================
 
-SCRIPT_VERSION = "v6.2"
+SCRIPT_VERSION = "v7.0"
 
 ROOT_DIR = "./01_E-Mails_EML"
 PDF_ROOT_DIR = "./02_Anhaenge_PDF"
 
 OUTPUT_CSV = (
-    # f"./output/"
+    # f"./00_Timeline/"
     # f"chronify_{SCRIPT_VERSION}.csv"
-    "./output/chronify_timeline.csv"
+    "./00_Timeline/chronify_timeline.csv"
 )
 
 PDF_OUTPUT_CSV = (
-    "./output/chronify_pdf_attachments.csv"
+    "./00_Timeline/chronify_pdf_attachments.csv"
 )
 
 TOPIC_CANDIDATES_FILE = (
@@ -44,8 +46,22 @@ TOPICS_FILE = (
     "./data/topics.json"
 )
 
+REJECTED_WORDS_FILE = "./data/rejected_words.txt"
+
 TEXT_PREVIEW_LENGTH = 250
 MIN_WORD_LENGTH = 5
+WORD_CHARACTERS = set(
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ"
+    "abcdefghijklmnopqrstuvwxyzäöüß"
+)
+
+NLP = stanza.Pipeline(
+    "de",
+    processors="tokenize,pos",
+    download_method=None,
+    use_gpu=False,
+    verbose=False
+)
 
 
 # ==========================================
@@ -274,26 +290,122 @@ def create_preview(text):
 # TOPIC CANDIDATES
 # ==========================================
 
-# Extract potential topic candidates from the email text
-def extract_candidate_words(text):
-    words = re.findall(
-        r"[A-Za-zÄÖÜäöüß]{5,}",
-        text
+def load_rejected_words(filepath):
+    new_rejected_words = []
+    previously_reviewed_words = []
+
+    if not os.path.exists(filepath):
+        return new_rejected_words, previously_reviewed_words
+
+    current_section = previously_reviewed_words
+
+    with open(filepath, "r", encoding="utf-8") as f:
+        for line in f:
+            word = line.strip()
+
+            if word.startswith("# ----- New rejected words ("):
+                current_section = new_rejected_words
+                continue
+
+            if word == "# ----- Previously reviewed -----":
+                current_section = previously_reviewed_words
+                continue
+
+            if word and not word.startswith("#"):
+                current_section.append(word)
+
+    return new_rejected_words, previously_reviewed_words
+
+
+def write_rejected_words(filepath, new_rejected_words, previously_reviewed_words):
+    lines = [
+        f"# ----- New rejected words ({date.today().isoformat()}) -----",
+        "",
+        *new_rejected_words,
+        "",
+        "# ----- Previously reviewed -----",
+        "",
+        *previously_reviewed_words
+    ]
+
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+
+def update_rejected_words(rejected_words):
+    new_rejected_words, previously_reviewed_words = load_rejected_words(
+        REJECTED_WORDS_FILE
     )
+
+    known_words = set(new_rejected_words)
+    known_words.update(previously_reviewed_words)
+
+    unique_rejected_words = []
+
+    for word in rejected_words:
+        if word not in known_words:
+            unique_rejected_words.append(word)
+            known_words.add(word)
+
+    rejected_words = unique_rejected_words
+
+    if os.path.exists(REJECTED_WORDS_FILE) and not rejected_words:
+        return
+
+    reviewed_words = []
+    reviewed_words_seen = set()
+
+    for word in new_rejected_words + previously_reviewed_words:
+        if word not in reviewed_words_seen:
+            reviewed_words.append(word)
+            reviewed_words_seen.add(word)
+
+    write_rejected_words(
+        REJECTED_WORDS_FILE,
+        rejected_words,
+        reviewed_words
+    )
+
+
+def record_rejected_word(rejected_words, word):
+    rejected_words.append(word)
+
+
+# Extract potential topic candidates from the email text
+def extract_candidate_words(text, rejected_words=None):
+    doc = NLP(text)
 
     result = []
 
-    for word in words:
-        if len(word) < MIN_WORD_LENGTH:
-            continue
+    for sentence in doc.sentences:
+        for token in sentence.tokens:
+            for word in token.words:
+                word_text = word.text
 
-        if not word[0].isupper():
-            continue
+                if not word_text or not all(
+                    character in WORD_CHARACTERS
+                    for character in word_text
+                ):
+                    continue
 
-        if is_blacklisted(word):
-            continue
+                if len(word_text) < MIN_WORD_LENGTH:
+                    continue
 
-        result.append(word)
+                if is_blacklisted(word_text):
+                    continue
+
+                if word.upos in {"NOUN", "PROPN"}:
+                    result.append(word_text)
+                    continue
+
+                if (
+                    word_text[0].isupper()
+                    and rejected_words is not None
+                ):
+                    record_rejected_word(
+                        rejected_words,
+                        word_text
+                    )
 
     return result
 
@@ -346,6 +458,7 @@ def collect_emails():
     pdf_rows = []
 
     candidate_word_counts = Counter()
+    rejected_words = []
 
     for eml_file in Path(ROOT_DIR).rglob("*.eml"):
         try:
@@ -368,7 +481,10 @@ def collect_emails():
 
             # Collect Words
             candidate_word_counts.update(
-                extract_candidate_words(mailtext)
+                extract_candidate_words(
+                    mailtext,
+                    rejected_words
+                )
             )
 
             # Collect pdf attachments
@@ -466,6 +582,8 @@ def collect_emails():
             print(ex)
             print("=" * 80)
             print()
+
+    update_rejected_words(rejected_words)
 
     eml_rows.sort(
         key=lambda r: r["_sort_dt"],
@@ -589,6 +707,11 @@ def write_timeline_csv(eml_rows):
 
 
 def write_pdf_attachment_csv(pdf_rows):
+    os.makedirs(
+        os.path.dirname(PDF_OUTPUT_CSV),
+        exist_ok=True
+    )
+
     # Write PDF attachmenets list to PDF-attachments-CSV
     pdf_fieldnames = [
         "Anhang_vom",
