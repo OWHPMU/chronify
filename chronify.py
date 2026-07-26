@@ -543,6 +543,47 @@ def detect_timeline_topics(eml_rows, topics_dict):
         )
 
 
+def print_summary(
+    SCRIPT_VERSION,
+    eml_rows,
+    pdf_rows,
+    TOPIC_CANDIDATES_FILE,
+    TOPICS_FILE,
+    OUTPUT_CSV,
+    PDF_OUTPUT_CSV
+):
+    print()
+    print("=" * 80)
+    print(f"Chronify {SCRIPT_VERSION}")
+    print("Verwandelt E-Mails, Dokumente und Anhänge in eine strukturierte, durchsuchbare Timeline.")
+    print("=" * 80)
+
+    print()
+    print(f"EMLs gefunden: {len(eml_rows)}")
+    print(f"PDFs gefunden: {len(pdf_rows)}")
+
+    print()
+    print("Topic-Kandidaten:")
+    print(TOPIC_CANDIDATES_FILE)
+
+    if os.path.exists(TOPICS_FILE):
+        print()
+        print("Topics:")
+        print(TOPICS_FILE)
+
+    print()
+    print("CSV erzeugt:")
+    print(OUTPUT_CSV)
+
+    print()
+    print("PDF CSV erzeugt:")
+    print(PDF_OUTPUT_CSV)
+
+    print()
+    print("=" * 80)
+    print()
+
+
 # ==========================================
 # Main application
 # ==========================================
@@ -633,36 +674,15 @@ def main():
     # AUSGABE
     # ==========================================
 
-    print()
-    print("=" * 80)
-    print(f"Chronify {SCRIPT_VERSION}")
-    print("Verwandelt E-Mails, Dokumente und Anhänge in eine strukturierte, durchsuchbare Timeline.")
-    print("=" * 80)
-
-    print()
-    print(f"EMLs gefunden: {len(eml_rows)}")
-    print(f"PDFs gefunden: {len(pdf_rows)}")
-
-    print()
-    print("Topic-Kandidaten:")
-    print(TOPIC_CANDIDATES_FILE)
-
-    if os.path.exists(TOPICS_FILE):
-        print()
-        print("Topics:")
-        print(TOPICS_FILE)
-
-    print()
-    print("CSV erzeugt:")
-    print(OUTPUT_CSV)
-
-    print()
-    print("PDF CSV erzeugt:")
-    print(PDF_OUTPUT_CSV)
-
-    print()
-    print("=" * 80)
-    print()
+    print_summary(
+        SCRIPT_VERSION,
+        eml_rows,
+        pdf_rows,
+        TOPIC_CANDIDATES_FILE,
+        TOPICS_FILE,
+        OUTPUT_CSV,
+        PDF_OUTPUT_CSV
+    )
 
 
 
