@@ -4,6 +4,7 @@
 *.swp
 *.zip
 *.json
+!data/*.json
 
 .DS_Store
 **/.DS_Store

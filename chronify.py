@@ -27,20 +27,21 @@ ROOT_DIR = "./01_E-Mails_EML"
 PDF_ROOT_DIR = "./02_Anhaenge_PDF"
 
 OUTPUT_CSV = (
-    f"./00_Timeline/"
-    f"chronify_{SCRIPT_VERSION}.csv"
+    # f"./output/"
+    # f"chronify_{SCRIPT_VERSION}.csv"
+    "./output/chronify_timeline.csv"
 )
 
 PDF_OUTPUT_CSV = (
-    "./00_Timeline/chronify_pdf_attachments.csv"
+    "./output/chronify_pdf_attachments.csv"
 )
 
 TOPIC_CANDIDATES_FILE = (
-    "./00_Timeline/topic_candidates.json"
+    "./data/topic_candidates.json"
 )
 
 TOPICS_FILE = (
-    "./00_Timeline/topics.json"
+    "./data/topics.json"
 )
 
 TEXT_PREVIEW_LENGTH = 250
@@ -51,7 +52,7 @@ MIN_WORD_LENGTH = 5
 # BLACKLIST - exclude from topic detection
 # ==========================================
 
-BLACKLIST_FILE = "blacklist.txt"
+BLACKLIST_FILE = "./data/blacklist.txt"
 
 
 # Loads blacklist from file
@@ -663,7 +664,7 @@ def main():
         "EML_Dateiname"
     ]
 
-    with open("./00_Timeline/chronify_pdf_attachments.csv", "w", newline="", encoding="utf-8-sig") as f:
+    with open(PDF_OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(
             f,
             fieldnames=pdf_fieldnames,

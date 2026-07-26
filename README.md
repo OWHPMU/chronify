@@ -1,9 +1,13 @@
 chronify/
 
-├── 00_Timeline
-│   ├── chronify_v*.csv
+├── data
+│   ├── blacklist.txt
 │   ├── topics.json
 │   └── topic_candidates.json
+│
+├── output
+│   ├── chronify_timeline.csv
+│   └── chronify_pdf_attachments.csv
 │
 ├── 01_E-Mails_EML/
 │   ├── gesendet
