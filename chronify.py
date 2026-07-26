@@ -535,6 +535,14 @@ def update_topics(candidate_word_counts):
     return topics_dict
 
 
+def detect_timeline_topics(eml_rows, topics_dict):
+    for row in eml_rows:
+        row["Topics"] = detect_topics(
+            row["_mailtext"],
+            topics_dict
+        )
+
+
 # ==========================================
 # Main application
 # ==========================================
@@ -564,11 +572,7 @@ def main():
 
     topics_dict = update_topics(candidate_word_counts)
 
-    for row in eml_rows:
-        row["Topics"] = detect_topics(
-            row["_mailtext"],
-            topics_dict
-        )
+    detect_timeline_topics(eml_rows, topics_dict)
 
     # ==========================================
     # WRITE EML-CSV UND PDF-ATTACHMENTS-CSV
