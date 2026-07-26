@@ -1,8 +1,24 @@
 # Chronify
 
 
-### v6.1 - 2026-06-29
+### v6.2 - 2026-07-26
+Refactoring
+- Introduced def main
+- Refactored the main processing pipeline into clearly separated stages.
+- Extracted email collection, topic handling, CSV generation and summary output into dedicated functions.
+- Moved sorting into the collection stage so collected data is returned in canonical chronological order.
+- Improved readability and maintainability while preserving application behavior.
+Project Structure
+- Introduced dedicated `data/` and `output/` directories.
+- Moved application data files (`blacklist`, `topics.json`, `topic_candidates.json`) into `data/`.
+- Renamed and standardized generated output filenames.
+- Updated project documentation and `.gitignore`.
+Quality
+- Added regression testing using reference CSV files.
+- Verified every refactoring step by comparing generated output against reference files.
+- No functional changes; behavior intentionally preserved.
 
+### v6.1 - 2026-06-29
 - Improved topic detection by analyzing the complete email text instead of only the preview.
 - Fixed timeline topic generation on the initial run.
 - Removed obsolete topic detection limits (`MIN_OCCURRENCES`, `MAX_CANDIDATES`).
