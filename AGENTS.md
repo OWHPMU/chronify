@@ -15,7 +15,7 @@
 - Separate refactoring and feature development into different commits.
 - Prefer pipeline-oriented functions over many tiny helper functions.
 - Each extracted function should represent one processing step.
-- Keep each change suitable for a single Git commit.
+- When a refactoring can reasonably be split into multiple independent commits, implement only one logical step.
 
 ## Chronify Architecture
 
@@ -31,6 +31,9 @@
 - Write new comments only when they explain intent rather than implementation.
 - Never remove code unless it is clearly obsolete or explicitly requested.
 - Keep the implementation as simple as possible.
+- Preserve existing behavior exactly unless explicitly requested otherwise.
+- Preserve existing function contracts unless explicitly requested otherwise.
+- If a requested refactoring conflicts with an existing contract, stop and explain the conflict before making changes.
 
 ## Learning
 
