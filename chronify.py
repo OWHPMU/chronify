@@ -340,22 +340,11 @@ def detect_topics(text, topics_dict):
 
 
 
-# ==========================================
-# Main application
-# ==========================================
-
-def main():
-    topics_dict = {}
-
+def collect_emails():
     eml_rows = []
     pdf_rows = []
 
     candidate_word_counts = Counter()
-
-
-    # ==========================================
-    # EML EINLESEN
-    # ==========================================
 
     for eml_file in Path(ROOT_DIR).rglob("*.eml"):
         try:
@@ -476,6 +465,22 @@ def main():
             print(ex)
             print("=" * 80)
             print()
+
+    return eml_rows, pdf_rows, candidate_word_counts
+
+
+# ==========================================
+# Main application
+# ==========================================
+
+def main():
+    topics_dict = {}
+
+    # ==========================================
+    # EML EINLESEN
+    # ==========================================
+
+    eml_rows, pdf_rows, candidate_word_counts = collect_emails()
 
 
     # ==========================================
