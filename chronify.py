@@ -467,6 +467,17 @@ def collect_emails():
             print("=" * 80)
             print()
 
+    eml_rows.sort(
+        key=lambda r: r["_sort_dt"],
+        reverse=True
+    )
+
+
+    pdf_rows.sort(
+        key=lambda r: r["_sort_dt"],
+        reverse=True
+    )
+
     return eml_rows, pdf_rows, candidate_word_counts
 
 
@@ -654,17 +665,6 @@ def main():
     # ==========================================
     # SORT EML-CSV
     # ==========================================
-
-    eml_rows.sort(
-        key=lambda r: r["_sort_dt"],
-        reverse=True
-    )
-
-
-    pdf_rows.sort(
-        key=lambda r: r["_sort_dt"],
-        reverse=True
-    )
 
     topics_dict = update_topics(candidate_word_counts)
 
