@@ -469,36 +469,7 @@ def collect_emails():
     return eml_rows, pdf_rows, candidate_word_counts
 
 
-# ==========================================
-# Main application
-# ==========================================
-
-def main():
-    topics_dict = {}
-
-    # ==========================================
-    # EML EINLESEN
-    # ==========================================
-
-    eml_rows, pdf_rows, candidate_word_counts = collect_emails()
-
-
-    # ==========================================
-    # SORT EML-CSV
-    # ==========================================
-
-    eml_rows.sort(
-        key=lambda r: r["_sort_dt"],
-        reverse=True
-    )
-
-
-    pdf_rows.sort(
-        key=lambda r: r["_sort_dt"],
-        reverse=True
-    )
-
-
+def update_topics(candidate_word_counts):
     # ==========================================
     # topic_candidates.json
     # ==========================================
@@ -560,6 +531,38 @@ def main():
         json.dump(sorted_topics, f, indent=4, ensure_ascii=False )
 
     topics_dict = load_topics()
+
+    return topics_dict
+
+
+# ==========================================
+# Main application
+# ==========================================
+
+def main():
+    # ==========================================
+    # EML EINLESEN
+    # ==========================================
+
+    eml_rows, pdf_rows, candidate_word_counts = collect_emails()
+
+
+    # ==========================================
+    # SORT EML-CSV
+    # ==========================================
+
+    eml_rows.sort(
+        key=lambda r: r["_sort_dt"],
+        reverse=True
+    )
+
+
+    pdf_rows.sort(
+        key=lambda r: r["_sort_dt"],
+        reverse=True
+    )
+
+    topics_dict = update_topics(candidate_word_counts)
 
     for row in eml_rows:
         row["Topics"] = detect_topics(
