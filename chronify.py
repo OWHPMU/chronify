@@ -543,6 +543,39 @@ def detect_timeline_topics(eml_rows, topics_dict):
         )
 
 
+def write_timeline_csv(eml_rows):
+    os.makedirs(
+        os.path.dirname(OUTPUT_CSV),
+        exist_ok=True
+    )
+
+    # Write EML to CSV
+    fieldnames = [
+        "E_Mail_vom",
+        "Uhrzeit",
+        "Richtung",
+        "Topics",
+        "Betreff",
+        "Text_Auszug",
+        "PDF_Anhaenge",
+        "Absender",
+        "Empfaenger",
+        "Message_ID",
+        "In_Reply_To",
+        "Dateiname"
+    ]
+
+    with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=fieldnames,
+            extrasaction="ignore"
+        )
+
+        writer.writeheader()
+        writer.writerows(eml_rows)
+
+
 def print_summary(
     SCRIPT_VERSION,
     eml_rows,
@@ -619,36 +652,7 @@ def main():
     # WRITE EML-CSV UND PDF-ATTACHMENTS-CSV
     # ==========================================
 
-    os.makedirs(
-        os.path.dirname(OUTPUT_CSV),
-        exist_ok=True
-    )
-
-    # Write EML to CSV
-    fieldnames = [
-        "E_Mail_vom",
-        "Uhrzeit",
-        "Richtung",
-        "Topics",
-        "Betreff",
-        "Text_Auszug",
-        "PDF_Anhaenge",
-        "Absender",
-        "Empfaenger",
-        "Message_ID",
-        "In_Reply_To",
-        "Dateiname"
-    ]
-
-    with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.DictWriter(
-            f,
-            fieldnames=fieldnames,
-            extrasaction="ignore"
-        )
-
-        writer.writeheader()
-        writer.writerows(eml_rows)
+    write_timeline_csv(eml_rows)
 
     # Write PDF attachmenets list to PDF-attachments-CSV
     pdf_fieldnames = [
